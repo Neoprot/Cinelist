@@ -1,16 +1,12 @@
 import React from 'react';
 import MovieSearch from '../components/MovieSearch';
-import FavoriteList from '../components/FavoriteList';
-import { useFavorites } from '../hooks/useFavorites';
+import MovieList from '../components/MovieList';
 
 const HomePage: React.FC = () => {
-    const { userId } = useFavorites();
-
     return (
-        <div className="container mx-auto p-4">
-        <h1 className="text-3xl font-bold mb-4">Movie List</h1>
+        <div>
         <MovieSearch />
-        <FavoriteList userId={userId} />
+        <MovieList movies={[]} /> {/* Substitua com a lógica correta para listar filmes */}
         </div>
     );
 };

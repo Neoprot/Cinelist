@@ -1,24 +1,31 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import HomePage from './pages/homePage';
-import Login from './components/Login';
-import SignUp from './components/SignUp';
+import HomePage from './pages/HomePage';
+import FavoritesPage from './pages/FavoritesPage';
+import LoginPage from './pages/LoginPage';
+import SignUpPage from './pages/SignUpPage';
 import ProtectedRoute from './components/ProtectedRoute';
-import { FavoriteProvider } from './context/FavoriteContext';
+import { AuthProvider } from './context/AuthContext';
 
 const App: React.FC = () => {
   return (
-    <FavoriteProvider>
+    <AuthProvider>
       <Router>
-        <div className="min-h-screen bg-gray-100">
-          <Routes>
-            <Route path="/login" element={<Login />} />
-            <Route path="/signup" element={<SignUp />} />
-            <Route path="/" element={<ProtectedRoute><HomePage /></ProtectedRoute>} />
-          </Routes>
-        </div>
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route
+            path="/favorites"
+            element={
+              <ProtectedRoute>
+                <FavoritesPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/signup" element={<SignUpPage />} />
+        </Routes>
       </Router>
-    </FavoriteProvider>
+    </AuthProvider>
   );
 };
 

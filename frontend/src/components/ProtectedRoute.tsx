@@ -1,14 +1,20 @@
 import React from 'react';
 import { Navigate } from 'react-router-dom';
-import { useFavorites } from '../hooks/useFavorites';
+import { useAuth } from '../context/AuthContext';
 
-const ProtectedRoute: React.FC<{ children: JSX.Element }> = ({ children }) => {
-    const { isLoggedIn } = useFavorites();
+interface ProtectedRouteProps {
+    children: JSX.Element;
+}
 
-    if (!isLoggedIn) {
+const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
+    const { user } = useAuth();
+
+    if (!user) {
+        // Se o usuário não estiver autenticado, redirecione para a página de login
         return <Navigate to="/login" />;
     }
 
+    // Se estiver autenticado, renderize o componente filho
     return children;
 };
 

@@ -1,31 +1,32 @@
 import { Request, Response } from 'express';
-import { signIn, signOut, signUp } from '../services/authService';
+import { signUp, signIn, signOut } from '../services/authService';
 
-export const handleSignUp = async (req: Request, res: Response) => {
+export const register = async (req: Request, res: Response) => {
+    const { email, password } = req.body;
     try {
-        const { email, password } = req.body;
-        const data = await signUp(email, password);
-        res.status(201).json(data);
+        const user = await signUp(email, password);
+        console.log(user);
+        res.status(201).json(user);
     } catch (error) {
-        res.status(400).json({ error: error.message });
+        res.status(400).json({ error: (error as Error).message });
     }
 };
 
-export const handleSignIn = async (req: Request, res: Response) => {
+export const login = async (req: Request, res: Response) => {
+    const { email, password } = req.body;
     try {
-        const { email, password } = req.body;
-        const data = await signIn(email, password);
-        res.status(200).json(data);
+        const session = await signIn(email, password);
+        res.status(200).json(session);
     } catch (error) {
-        res.status(400).json({ error: error.message });
+        res.status(400).json({ error: (error as Error).message });
     }
 };
 
-export const handleSignOut = async (req: Request, res: Response) => {
+export const logout = async (req: Request, res: Response) => {
     try {
         await signOut();
-        res.status(204).end();
+        res.status(204).send();
     } catch (error) {
-        res.status(400).json({ error: error.message });
+        res.status(400).json({ error: (error as Error).message });
     }
 };

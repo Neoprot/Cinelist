@@ -1,31 +1,21 @@
-import React, { useEffect, useState } from 'react';
-import { getFavorites } from '../services/api';
+import React from 'react';
+import { useFavorites } from '../context/FavoritesContext';
+import MovieCard from './MovieCard';
 
-interface FavoriteListProps {
-    userId: string;
-}
-
-const FavoriteList: React.FC<FavoriteListProps> = ({ userId }) => {
-    const [favorites, setFavorites] = useState<number[]>([]);
-
-    useEffect(() => {
-        const fetchFavorites = async () => {
-        const data = await getFavorites(userId);
-        setFavorites(data.map((fav: any) => fav.movie_id));
-        };
-        fetchFavorites();
-    }, [userId]);
+const FavoriteList: React.FC = () => {
+    const { favorites } = useFavorites();
 
     return (
         <div>
-        <h2 className="text-xl font-bold mb-4">Your Favorites</h2>
-        <ul>
-            {favorites.map(fav => (
-            <li key={fav} className="mb-2">
-                Movie ID: {fav}
-            </li>
+        {favorites.length === 0 ? (
+            <p>No favorite movies added yet.</p>
+        ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {favorites.map((movie) => (
+                <MovieCard key={movie.id} movie={movie} />
             ))}
-        </ul>
+            </div>
+        )}
         </div>
     );
 };
