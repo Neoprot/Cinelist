@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import { getMovies, getMovieDetails, addFavorite, getFavorites } from '../services/movieService';
 import { Database } from '../utils/databaseTypes';
 
+
 type FavoriteRow = Database['public']['Tables']['favorites']['Row'];
 
 export const fetchMovies = async (req: Request, res: Response) => {

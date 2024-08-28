@@ -5,7 +5,7 @@ export const api = axios.create({
 });
 
 export const fetchMovies = async (query: string) => {
-    const response = await api.get(`/movies/search?q=${query}`);
+    const response = await api.get(`/movies/search?query=${query}`);
     return response.data;
 };
 

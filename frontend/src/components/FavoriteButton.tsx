@@ -20,7 +20,7 @@ const FavoriteButton: React.FC<FavoriteButtonProps> = ({ movie }) => {
     return (
         <button 
         onClick={handleClick} 
-        className={`p-2 ${isFavorite ? 'bg-red-500' : 'bg-blue-500'} text-white`}
+        className={`p-2 rounded ${isFavorite ? 'bg-red-500' : 'bg-blue-500'} text-white`}
         >
         {isFavorite ? 'Remove from Favorites' : 'Add to Favorites'}
         </button>
