@@ -23,12 +23,10 @@ const MovieList: React.FC<MovieListProps> = ({ movies }) => {
             }
         };
 
-        // Adiciona os event listeners para atualizar os botões conforme o scroll e o redimensionamento
         const container = scrollContainerRef.current;
         container?.addEventListener('scroll', updateScrollButtons);
         window.addEventListener('resize', updateScrollButtons);
 
-        // Inicializa os botões na primeira renderização
         updateScrollButtons();
 
         return () => {
@@ -39,15 +37,21 @@ const MovieList: React.FC<MovieListProps> = ({ movies }) => {
 
     const scrollLeft = () => {
         if (scrollContainerRef.current) {
-            const scrollAmount = Math.min(5 * 200, scrollContainerRef.current.clientWidth);
-            scrollContainerRef.current.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+            const scrollAmount = Math.min(200, scrollContainerRef.current.clientWidth / 2);
+            scrollContainerRef.current.scrollBy({
+                left: -scrollAmount,
+                behavior: 'smooth',
+            });
         }
     };
 
     const scrollRight = () => {
         if (scrollContainerRef.current) {
-            const scrollAmount = Math.min(5 * 200, scrollContainerRef.current.clientWidth);
-            scrollContainerRef.current.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+            const scrollAmount = Math.min(200, scrollContainerRef.current.clientWidth / 2);
+            scrollContainerRef.current.scrollBy({
+                left: scrollAmount,
+                behavior: 'smooth',
+            });
         }
     };
 
@@ -56,9 +60,9 @@ const MovieList: React.FC<MovieListProps> = ({ movies }) => {
             {showScrollLeft && (
                 <button
                     onClick={scrollLeft}
-                    className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-gray-800 text-white p-2 rounded-full z-10"
+                    className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-gray-800 text-white p-2 rounded-full z-10"
                 >
-                    <IconButton color='info'>
+                    <IconButton color="info">
                         <ArrowBackIcon sx={{ fontSize: 40 }} />
                     </IconButton>
                 </button>
@@ -66,18 +70,20 @@ const MovieList: React.FC<MovieListProps> = ({ movies }) => {
             <div
                 className="flex overflow-x-auto space-x-4 p-4 scrollbar-hide"
                 ref={scrollContainerRef}
-                style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+                style={{ scrollbarWidth: 'none', msOverflowStyle: 'none', transition: 'transform 0.5s ease' }}
             >
                 {movies.map((movie) => (
-                    <MovieCard key={movie.id} movie={movie} />
+                    <div key={movie.id} className="flex-shrink-0 w-48">
+                        <MovieCard movie={movie} />
+                    </div>
                 ))}
             </div>
             {showScrollRight && (
                 <button
                     onClick={scrollRight}
-                    className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-gray-800 text-white p-2 rounded-full z-10"
+                    className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-gray-800 text-white p-2 rounded-full z-10"
                 >
-                    <IconButton color='info'>
+                    <IconButton color="info">
                         <ArrowForwardIcon sx={{ fontSize: 40 }} />
                     </IconButton>
                 </button>
