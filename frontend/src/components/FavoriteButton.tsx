@@ -11,9 +11,9 @@ const FavoriteButton: React.FC<FavoriteButtonProps> = ({ movie }) => {
 
     const handleClick = () => {
         if (isFavorite) {
-        removeFavorite(movie.id);
+            removeFavorite(movie.id);
         } else {
-        addFavorite(movie);
+            addFavorite(movie);
         }
     };
 

@@ -30,8 +30,7 @@ export const getMovieDetails = async (movieId: number) => {
     }
 };
 
-// Os métodos relacionados a favoritos ainda usarão o Supabase
-import supabase from './supabaseClient';
+import { supabase } from './supabaseClient';
 import { Database } from '../utils/databaseTypes';
 
 type FavoriteRow = Database['public']['Tables']['favorites']['Row'];
