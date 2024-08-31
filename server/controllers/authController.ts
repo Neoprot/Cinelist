@@ -1,42 +1,41 @@
-import { Request, Response } from 'express';
-import jwt from 'jsonwebtoken';
-import { registerUser, loginUser } from '../services/authService';
-import { userService } from '../services/userService';
+import { Request, Response } from "express";
+import jwt from "jsonwebtoken";
+import { registerUser, loginUser } from "../services/authService";
+import { userService } from "../services/userService";
 
 const JWT_SECRET = process.env.JWT_SECRET as string;
 
 export const register = async (req: Request, res: Response) => {
-    try {
-        const { email, password } = req.body;
-        const { user, token } = await registerUser(email, password);
-        res.status(201).json({ user, token });
-    } catch (error) {
-        res.status(400).json({ message: (error as Error).message });
-    }
+  try {
+    const { email, password } = req.body;
+    const { user, token } = await registerUser(email, password);
+    res.status(201).json({ user, token });
+  } catch (error) {
+    res.status(400).json({ message: (error as Error).message });
+  }
 };
 
 export const login = async (req: Request, res: Response) => {
-    try {
-        const { email, password } = req.body;
-        const { user, token } = await loginUser(email, password);
-        res.status(200).json({ user, token });
-    } catch (error) {
-        res.status(400).json({ message: (error as Error).message });
-    };
-
+  try {
+    const { email, password } = req.body;
+    const { user, token } = await loginUser(email, password);
+    res.status(200).json({ user, token });
+  } catch (error) {
+    res.status(400).json({ message: (error as Error).message });
+  }
 };
 
-export const validateToken = async (req: Request, res: Response) =>{
-    const token = req.headers.authorization?.split(' ')[1];
+export const validateToken = async (req: Request, res: Response) => {
+  const token = req.headers.authorization?.split(" ")[1];
 
-    if (!token) {
-        return res.status(401).json({ message: 'Token not provided' });
-    }
+  if (!token) {
+    return res.status(401).json({ message: "Token not provided" });
+  }
 
-    try {
-        const user = await userService.validateToken(token);
-        res.status(200).json({ user });
-    } catch (error) {
-        res.status(401).json({ message: 'Invalid token' });
-    }
+  try {
+    const user = await userService.validateToken(token);
+    res.status(200).json({ user });
+  } catch (error) {
+    res.status(401).json({ message: "Invalid token" });
+  }
 };
