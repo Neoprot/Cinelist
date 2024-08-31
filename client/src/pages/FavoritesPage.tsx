@@ -2,11 +2,19 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import FavoriteList from '../components/FavoriteList';
 import { useAuth } from '../context/AuthContext';
+import { postSharedFavorites } from '../services/api';
+import { useFavorites } from '../context/FavoritesContext';
 
 const FavoritesPage: React.FC = () => {
+    const { favorites } = useFavorites();
     const { user, logout } = useAuth();
-    const handleShareFavorites = () => {
-        alert('Not implemented yet');
+    const handleShareFavorites = async () => {
+        try {
+                const moviesId = favorites.map((movie) => movie.movie_id || movie.id);
+                const res = await postSharedFavorites(user.id, user.email,moviesId);
+                alert(`Shareable link: ${window.location.origin}/shared-favorites/${res.id}`);
+            } catch (error) {
+            }
     };
 
     return (

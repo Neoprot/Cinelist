@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { api } from '../services/api';
+import { getMovieDetails } from '../services/api';
 import FavoriteButton from './FavoriteButton';
 
 interface MovieDetailsProps {
@@ -12,8 +12,8 @@ const MovieDetails: React.FC<MovieDetailsProps> = ({ movieId }) => {
     useEffect(() => {
         const fetchMovieDetails = async () => {
             try {
-                const response = await api.get(`/movies/search/${movieId}`);
-                setMovie(response.data);
+                const response = await getMovieDetails(movieId);
+                setMovie(response);
             } catch (error) {
                 console.error("Erro ao buscar detalhes do filme:", error);
             }

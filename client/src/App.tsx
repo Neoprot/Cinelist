@@ -7,6 +7,7 @@ import SignUpPage from './pages/SignUpPage';
 import ProtectedRoute from './components/ProtectedRoute';
 import { AuthProvider } from './context/AuthContext';
 import { FavoritesProvider } from './context/FavoritesContext';
+import SharedFavoritesPage from './pages/SharedFavoritesPage';
 
 const App: React.FC = () => {
   return (
@@ -25,6 +26,7 @@ const App: React.FC = () => {
             />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/signup" element={<SignUpPage />} />
+            <Route path="/shared-favorites/:id" element={<SharedFavoritesPage />} />
           </Routes>
         </Router>
       </FavoritesProvider>

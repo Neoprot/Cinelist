@@ -19,7 +19,6 @@ const FavoriteButton: React.FC<FavoriteButtonProps> = ({ movie }) => {
             return;
         }
         
-        console.log(movie);
         if (isFavorite) {
             removeFavorite(movie.movie_id||movie.id);
         } else {
