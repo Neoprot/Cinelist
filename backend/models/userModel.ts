@@ -1,4 +1,3 @@
-// src/models/userModel.ts
 import { supabase } from '../services/supabaseClient';
 
 interface User {
@@ -11,20 +10,33 @@ interface User {
 export const User = {
     async create(userData: { email: string; password: string }) {
         const { data, error } = await supabase
-            .from<any, any>('users')
+            .from('users')
             .insert([{ ...userData }])
+            .select()
             .single();
-        if (error) throw error;
+        
+        if (error) {
+            console.error('Error creating user:', error.message);
+            throw error;
+        }
+        
+        console.log('User created:', data);
         return data as User;
     },
 
     async findOne(query: { email: string }) {
         const { data, error } = await supabase
-            .from<any,any>('users')
+            .from('users')
             .select('*')
             .eq('email', query.email)
             .single();
-        if (error) throw error;
+
+        if (error) {
+            console.error('Error finding user:', error.message);
+            throw error;
+        }
+        
+        console.log('User found:', data);
         return data as User;
     },
 };

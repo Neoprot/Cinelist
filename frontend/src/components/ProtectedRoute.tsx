@@ -8,9 +8,9 @@ interface ProtectedRouteProps {
 
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
     const { user } = useAuth();
-
-    if (!user) {
-        // Se o usuário não estiver autenticado, redirecione para a página de login
+    
+    if (!localStorage.getItem('token')) {
+        alert('Você precisa estar logado para acessar esta página.');
         return <Navigate to="/login" />;
     }
 

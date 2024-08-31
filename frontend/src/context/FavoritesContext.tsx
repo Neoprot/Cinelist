@@ -1,4 +1,6 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
+import { api } from '../services/api';
+import { useAuth } from './AuthContext';
 
 interface FavoritesContextProps {
     favorites: any[];
@@ -6,22 +8,53 @@ interface FavoritesContextProps {
     removeFavorite: (movieId: string) => void;
 }
 
-const FavoritesContext = createContext<FavoritesContextProps | undefined>(undefined);
+export const FavoritesContext = createContext<FavoritesContextProps | undefined>(undefined);
 
 export const FavoritesProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+    const { user } = useAuth();
     const [favorites, setFavorites] = useState<any[]>([]);
+const [isFavoritesLoaded, setIsFavoritesLoaded] = useState(false);
 
-    const addFavorite = (movie: any) => {
-        setFavorites([...favorites, movie]);
+useEffect(() => {
+    const fetchFavorites = async () => {
+        if (user) {
+            try {
+                const response = await api.get(`/movies/favorites/${user.id}`);
+                setFavorites(response.data);
+                setIsFavoritesLoaded(true);
+            } catch (error) {
+                console.error('Error fetching favorites:', error);
+            }
+        }
     };
 
-    const removeFavorite = (movieId: string) => {
-        setFavorites(favorites.filter((movie) => movie.id !== movieId));
+    if (!isFavoritesLoaded) {
+        fetchFavorites();
+    }
+}, [user, isFavoritesLoaded]);
+
+    const addFavorite = async (movie: any) => {
+        try {
+            await api.post('/movies/favorites', { userId: user.id, movieId: movie.id, title: movie.title, poster_path: movie.poster_path });
+            setFavorites((prevFavorites) => [...prevFavorites, movie]);  // Atualiza o estado adicionando o novo favorito
+        } catch (error) {
+            console.error('Error adding favorite:', error);
+        }
+    };
+
+    const removeFavorite = async (movieId: string) => {
+        try {
+            console.log(user.id, movieId);
+            await api.delete(`/movies/favorites/${user.id}/${movieId}`);
+            setFavorites((prevFavorites) => prevFavorites.filter((movie) => movie.movie_id !== movieId && movie.id !== movieId));  // Atualiza o estado removendo o favorito
+        } catch (error) {
+            console.error('Error removing favorite:', error);
+        }
     };
 
     return (
         <FavoritesContext.Provider value={{ favorites, addFavorite, removeFavorite }}>
-        {children}
+            {children}
         </FavoritesContext.Provider>
     );
 };
