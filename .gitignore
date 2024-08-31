@@ -1,9 +1,9 @@
-frontend/.env
-frontend/node_modules
+client/.env
+client/node_modules
 
 
-backend/.env
-backend/node_modules
-backend/dist
+server/.env
+server/node_modules
+server/dist
 
 .env
