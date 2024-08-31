@@ -30,6 +30,19 @@ export const getMovieDetails = async (movieId: number) => {
     }
 };
 
+export const getTrendingMovies = async () => {
+    try {
+        const response = await axios.get(`${TMDB_BASE_URL}/trending/movie/week`, {
+            params: {
+                api_key: TMDB_API_KEY,
+            },
+        });
+        return response.data.results;
+    } catch (error) {
+        throw new Error(`Failed to fetch trending movies: ${(error as Error).message}`);
+    }
+}
+
 import { supabase } from './supabaseClient';
 import { Database } from '../utils/databaseTypes';
 

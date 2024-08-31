@@ -36,7 +36,7 @@ useEffect(() => {
     const addFavorite = async (movie: any) => {
         try {
             await api.post('/movies/favorites', { userId: user.id, movieId: movie.id, title: movie.title, poster_path: movie.poster_path });
-            setFavorites((prevFavorites) => [...prevFavorites, movie]);  // Atualiza o estado adicionando o novo favorito
+            setFavorites((prevFavorites) => [...prevFavorites, movie]);
         } catch (error) {
             console.error('Error adding favorite:', error);
         }
@@ -46,7 +46,7 @@ useEffect(() => {
         try {
             console.log(user.id, movieId);
             await api.delete(`/movies/favorites/${user.id}/${movieId}`);
-            setFavorites((prevFavorites) => prevFavorites.filter((movie) => movie.movie_id !== movieId && movie.id !== movieId));  // Atualiza o estado removendo o favorito
+            setFavorites((prevFavorites) => prevFavorites.filter((movie) => movie.movie_id !== movieId && movie.id !== movieId));
         } catch (error) {
             console.error('Error removing favorite:', error);
         }

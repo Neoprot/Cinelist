@@ -17,8 +17,8 @@ const Login: React.FC = () => {
             await login(email, password);
             navigate('/');
         } catch (error) {
-            console.error("Erro ao fazer login:", error);
-            alert("Erro ao fazer login. Por favor, verifique suas credenciais e tente novamente.");
+            console.error("Error when logging in:", error);
+            alert("Error when logging in. Please, check your credentials and try again.");
         }
     };
 
@@ -66,7 +66,7 @@ const Login: React.FC = () => {
                     </button>
                 </form>
                 <p className="text-center mt-8">
-                    Não tem uma conta? <a href="/signup" className="text-blue-500">Cadastre-se</a>
+                    Don't have an account? <a href="/signup" className="text-blue-500">Sign Up</a>
                 </p>
             </div>
         </div>

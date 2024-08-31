@@ -1,21 +1,21 @@
 import React from 'react';
 import { useFavorites } from '../context/FavoritesContext';
-import MovieCard from './MovieCard';
+import MovieDetails from './MovieDetails';
 
 const FavoriteList: React.FC = () => {
     const { favorites } = useFavorites();
 
     return (
         <div>
-        {favorites.length === 0 ? (
-            <p>No favorite movies added yet.</p>
-        ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {favorites.map((movie) => {
-                return <MovieCard key={movie.id} movie={movie} />;
-            })}
-            </div>
-        )}
+            {favorites.length === 0 ? (
+                <p>No favorite movies added yet.</p>
+            ) : (
+                <div className="space-y-12">
+                    {favorites.map((movie) => {
+                        return <MovieDetails key={movie.movie_id || movie.id} movieId={movie.movie_id || movie.id} />;
+                    })}
+                </div>
+            )}
         </div>
     );
 };

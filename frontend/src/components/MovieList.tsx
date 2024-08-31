@@ -37,7 +37,9 @@ const MovieList: React.FC<MovieListProps> = ({ movies }) => {
 
     const scrollLeft = () => {
         if (scrollContainerRef.current) {
-            const scrollAmount = Math.min(200, scrollContainerRef.current.clientWidth / 2);
+            const numberOfMoviesToScroll = 5;
+            const movieWidth = scrollContainerRef.current.scrollWidth / movies.length;
+            const scrollAmount = movieWidth * numberOfMoviesToScroll;
             scrollContainerRef.current.scrollBy({
                 left: -scrollAmount,
                 behavior: 'smooth',
@@ -47,7 +49,9 @@ const MovieList: React.FC<MovieListProps> = ({ movies }) => {
 
     const scrollRight = () => {
         if (scrollContainerRef.current) {
-            const scrollAmount = Math.min(200, scrollContainerRef.current.clientWidth / 2);
+            const numberOfMoviesToScroll = 5;
+            const movieWidth = scrollContainerRef.current.scrollWidth / movies.length;
+            const scrollAmount = movieWidth * numberOfMoviesToScroll;
             scrollContainerRef.current.scrollBy({
                 left: scrollAmount,
                 behavior: 'smooth',
@@ -70,10 +74,10 @@ const MovieList: React.FC<MovieListProps> = ({ movies }) => {
             <div
                 className="flex overflow-x-auto space-x-4 p-4 scrollbar-hide"
                 ref={scrollContainerRef}
-                style={{ scrollbarWidth: 'none', msOverflowStyle: 'none', transition: 'transform 0.5s ease' }}
+                style={{ scrollbarWidth: 'none', msOverflowStyle: 'none', scrollBehavior: 'smooth' }}
             >
-                {movies.map((movie) => (
-                    <div key={movie.id} className="flex-shrink-0 w-48">
+                {movies.map((movie, index) => (
+                    <div key={index} style={{ display: 'inline-block', width: '200px' }}>
                         <MovieCard movie={movie} />
                     </div>
                 ))}

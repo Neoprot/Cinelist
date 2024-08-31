@@ -10,7 +10,7 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
     const { user } = useAuth();
     
     if (!localStorage.getItem('token')) {
-        alert('Você precisa estar logado para acessar esta página.');
+        alert('You need to be logged in to access this page.');
         return <Navigate to="/login" />;
     }
 

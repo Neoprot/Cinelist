@@ -18,11 +18,11 @@ const MovieCard: React.FC<MovieCardProps> = ({ movie }) => {
                         className="w-full h-full object-cover" 
                     />
                 ) : (
-                    <span className="text-gray-500 text-center">Imagem não disponível</span>
+                    <span className="text-gray-500 text-center">Image not available</span>
                 )}
             </div>
             <h2 className="text-md font-bold mt-2 text-center">{movie.title}</h2>
-            <p className="text-sm mt-1">Rating: {movie.vote_average}</p>
+            <p className="text-sm mt-1">Rating: {movie.vote_average || "Not Rated"}</p>
             <FavoriteButton movie={movie} />
         </div>
     );

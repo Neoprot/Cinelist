@@ -9,6 +9,11 @@ export const fetchMovies = async (query: string) => {
     return response.data;
 };
 
+export const getTreadingMovies = async () => {
+    const response = await api.get(`/movies/trending`);
+    return response.data;
+};
+
 export const addFavorite = async (movieId: string) => {
     const response = await api.post(`/favorites`, { movieId });
     return response.data;

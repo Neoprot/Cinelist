@@ -1,12 +1,12 @@
 import { Request, Response } from 'express';
-import { getMovies, getMovieDetails, addFavorite, getFavorites, deleteFavorite } from '../services/movieService';
+import { getMovies, getMovieDetails, addFavorite, getFavorites, deleteFavorite, getTrendingMovies } from '../services/movieService';
 import { Database } from '../utils/databaseTypes';
 
 
 type FavoriteRow = Database['public']['Tables']['favorites']['Row'];
 
 export const fetchMovies = async (req: Request, res: Response) => {
-    const query = req.query.query as string; // Assumindo que a query de pesquisa é passada como parâmetro na URL
+    const query = req.query.query as string;
     try {
         const movies = await getMovies(query);
         res.status(200).json(movies);
@@ -24,6 +24,15 @@ export const fetchMovieDetails = async (req: Request, res: Response) => {
         res.status(400).json({ error: (error as Error).message });
     }
 };
+
+export const getTrending = async (req: Request, res: Response) => {
+    try {
+        const movies = await getTrendingMovies();
+        res.status(200).json(movies);
+    } catch (error) {
+        res.status(400).json({ error: (error as Error).message });
+    }
+}
 
 export const addFavoriteMovie = async (req: Request, res: Response) => {
     const { userId, movieId, title, poster_path} = req.body;

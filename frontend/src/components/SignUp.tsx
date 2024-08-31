@@ -20,11 +20,11 @@ const SignUp: React.FC = () => {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         if (password !== confirmPassword) {
-            alert("As senhas não coincidem.");
+            alert("Passwords do not match.");
             return;
         }
         if (!termsAccepted) {
-            alert("Você deve aceitar os termos de serviço.");
+            alert("You must accept the terms of service.");
             return;
         }
 
@@ -32,8 +32,8 @@ const SignUp: React.FC = () => {
             await signup(email, password);
             navigate('/login');
         } catch (error) {
-            console.error("Erro ao registrar:", error);
-            alert("Erro ao registrar. Por favor, tente novamente.");
+            console.error("Error when registering:", error);
+            alert("Error when registering. Please try again.");
         }
     };
 
@@ -101,14 +101,14 @@ const SignUp: React.FC = () => {
                             className="mr-2"
                             required
                         />
-                        <label className="text-sm">Aceito os termos de serviço</label>
+                        <label className="text-sm">I accept the terms of service</label>
                     </div>
                     <button type="submit" className="bg-blue-500 text-white p-2 w-full rounded">
                         Sign Up
                     </button>
                 </form>
                 <p className="text-center mt-4">
-                    Já tem uma conta? <a href="/login" className="text-blue-500">Login</a>
+                    Already have an account? <a href="/login" className="text-blue-500">Login</a>
                 </p>
             </div>
         </div>
