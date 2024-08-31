@@ -15,6 +15,7 @@ const Login: React.FC = () => {
         e.preventDefault();
         try {
             await login(email, password);
+            alert("Logged in successfully!");
             navigate('/');
         } catch (error) {
             console.error("Error when logging in:", error);
