@@ -30,6 +30,7 @@ const SharedFavoritesPage: React.FC = () => {
           return;
         }
         const response = await getSharedFavorites(id);
+        setUsername(response.username);
         const movieIds = response.movie_ids;
         setMovies(movieIds);
       } catch (error) {
