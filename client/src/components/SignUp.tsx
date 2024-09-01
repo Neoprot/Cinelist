@@ -12,7 +12,7 @@ const SignUp: React.FC = () => {
     const [termsAccepted, setTermsAccepted] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-    const {user, signup } = useAuth();
+    const {signup } = useAuth();
     const navigate = useNavigate();
 
     const [isLoading, setIsLoading] = useState(false);
@@ -24,7 +24,7 @@ const SignUp: React.FC = () => {
     const toggleConfirmPasswordVisibility = () => setShowConfirmPassword(!showConfirmPassword);
 
     useEffect(() => {
-        if (user) {
+        if (localStorage.getItem('token')) {
             setIsLoading(true);
             setMessage('You are already logged in. Redirecting to home page.');
             setSuccess(true);
@@ -33,7 +33,7 @@ const SignUp: React.FC = () => {
                 setIsLoading(false);
             }, 2000);
         }
-    }, [user, navigate]);
+    }, [navigate]);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -57,7 +57,7 @@ const SignUp: React.FC = () => {
             const response: any = await signup(username,email, password);
             console.log(response);
             if (response.status !== 201) {
-                setMessage('Email already registered. Please try again.');
+                setMessage(response.response.data.message);
                 setSuccess(false);
                 setError(true);
                 setTimeout(() => {

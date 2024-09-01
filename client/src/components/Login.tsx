@@ -7,7 +7,7 @@ import { FiEye, FiEyeOff } from 'react-icons/fi';
 const Login: React.FC = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const { user, login } = useAuth();
+    const {login } = useAuth();
     const navigate = useNavigate();
     const [showPassword, setShowPassword] = useState(false);
     const togglePasswordVisibility = () => setShowPassword(!showPassword);                        
@@ -18,7 +18,7 @@ const Login: React.FC = () => {
     const [error, setError] = useState(false);
 
     useEffect(() => {
-        if (user) {
+        if (localStorage.getItem('token')) {
             setIsLoading(true);
             setMessage('You are already logged in. Redirecting to home page.');
             setSuccess(true);
@@ -27,7 +27,7 @@ const Login: React.FC = () => {
                 setIsLoading(false);
             }, 2000);
         }
-    }, [user, navigate]);
+    }, [navigate]);
     
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
