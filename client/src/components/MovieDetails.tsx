@@ -25,7 +25,8 @@ const MovieDetails: React.FC<MovieDetailsProps> = ({ movieId }) => {
             navigate(`/movie/${movie.id}`);
         }
     };
-
+    
+    
     useEffect(() => {
         const fetchMovieDetails = async () => {
             try {
@@ -36,14 +37,15 @@ const MovieDetails: React.FC<MovieDetailsProps> = ({ movieId }) => {
                 console.error("Erro ao buscar detalhes do filme:", error);
             }
         };
-
+        
         fetchMovieDetails();
     }, [movieId]);
-
+    
     if (!movie) {
         return <div>Loading...</div>;
     }
-
+    
+    const rating = movie.vote_average ? movie.vote_average.toFixed(1) : "Not Rated";
     const releaseYear = movie.release_date ? new Date(movie.release_date).getFullYear() : '';
 
     return (
@@ -56,22 +58,25 @@ const MovieDetails: React.FC<MovieDetailsProps> = ({ movieId }) => {
                 />
             </div>
             <div className="p-4 md:w-5/6 relative bg-gray-800">
-                <div className="absolute top-4 right-4">
+                <div className="absolute top-8 right-8">
                     <FavoriteButton movie={movie} />
                 </div>
 
                 <h1
-                    className={`text-4xl font-bold mb-2 text-white pr-44 ${!samePage ? 'cursor-pointer hover:text-blue-500' : ''}`}
+                    className={`text-4xl font-bold mb-2 text-white inline ${!samePage ? 'cursor-pointer hover:text-blue-500' : ''}`}
                     onClick={!samePage ? handleClick : undefined}
                 >
                     {movie.title} ({releaseYear})
                 </h1>
+
                 <p className="text-white mb-4">{movie.tagline}</p>
-                <p className="text-white mb-2"><strong>Rating:</strong> {movie.vote_average || "Not Rated"}</p>
+                <p className="text-white mb-2"><strong>Rating:</strong> {rating}</p>
                 <p className="text-white mb-2"><strong>Genres:</strong> {movie.genres.map((genre: any) => genre.name).join(', ') || "Not Specified"}</p>
                 <p className="text-white mb-2"><strong>Runtime:</strong> {movie.runtime} minutes</p>
+                
                 <h1 className="text-4xl font-bold mb-2 text-white">Overview</h1>
                 <p className="text-white mb-4">{movie.overview}</p>
+                
                 <h2 className="text-2xl font-bold mb-2 text-white">Production Companies</h2>
                 <div className="flex flex-wrap gap-8">
                     {movie.production_companies.length > 0 ? (
