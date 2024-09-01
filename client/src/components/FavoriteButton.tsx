@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { useFavorites } from '../context/FavoritesContext';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
-import { FaHeart, FaHeartBroken } from 'react-icons/fa';
 import { IoMdHeartDislike , IoIosHeartEmpty, IoMdHeart } from "react-icons/io";
 
 interface FavoriteButtonProps {
@@ -18,6 +17,7 @@ const FavoriteButton: React.FC<FavoriteButtonProps> = ({ movie }) => {
     const isFavorite = favorites.some((fav) => fav.movie_id === movie.id || fav.id === movie.id);
     const handleClick = () => {
         if (!user) {
+            alert('You need to be logged in to add favorites.');
             navigate('/login');
             return;
         }
