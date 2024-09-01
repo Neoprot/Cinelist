@@ -8,6 +8,7 @@ const MovieSearch: React.FC = () => {
     const [movies, setMovies] = useState([]);
     const [trendingMovies, setTrendingMovies] = useState([]);
     const [isDailyTrending, setIsDailyTrending] = useState(false);
+    const [message, setMessage] = useState('Nothing here yet. Try searching for a movie');
 
     const firstAcess = async () => {
         const trending = await getTreadingMovies("week");
@@ -24,6 +25,7 @@ const MovieSearch: React.FC = () => {
             alert('Please enter a search query.');
         } else {
             const result = await fetchMovies(query);
+            setMessage(result.length === 0 ? 'No movies found with this query. Try searching something else' : '');
             setMovies(result);
         }
     };
@@ -62,7 +64,10 @@ const MovieSearch: React.FC = () => {
                 <div className="mt-4 w-full overflow-x-hidden">
                     {movies.length > 0 ? (
                         <><h1 className="text-4xl font-bold font-serif text-white px-4">Searched Movies</h1><MovieList movies={movies} /></>
-                    ) : (<></>
+                    ) : (<>
+                        <h1 className="text-4xl font-bold font-serif text-white px-4">Searched Movies</h1>
+                        <p className='text-2xl text-white px-8'>{message}</p>
+                    </>
                     )}
                 </div>
             </div>
