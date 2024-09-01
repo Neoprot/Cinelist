@@ -1,36 +1,54 @@
 import React, { useEffect, useState } from 'react';
-import { Link, Navigate, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { getSharedFavorites } from '../services/api';
 import MovieDetails from '../components/MovieDetails';
 import { useAuth } from '../context/AuthContext';
-import { useNavigate } from 'react-router-dom';
+import LoadingModal from '../components/LoadingModal';
 
 const SharedFavoritesPage: React.FC = () => {
   const { id } = useParams();
   const [movies, setMovies] = useState<any[]>([]);
   const { user, logout } = useAuth();
-  const [email, setEmail] = useState('');
-  const Navigate = useNavigate();
+  const [username, setUsername] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [message, setMessage] = useState('');
+  const [success, setSuccess] = useState(false);
+  const [error, setError] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchFavorites = async () => {
       try {
         if (!id) {
-          return console.error('No id provided to fetch shared favorites');
+          setIsLoading(true);
+          setError(true);
+          setMessage('No id provided to fetch shared favorites');
+          setTimeout(() => {
+            setIsLoading(false);
+            navigate('/');
+          }, 2000);
+          return;
         }
         const response = await getSharedFavorites(id);
         const movieIds = response.movie_ids;
-        setEmail(response.email);
         setMovies(movieIds);
       } catch (error) {
-        alert('User not found, please check the link or if the user exported the favorites');
-        console.error('Error fetching shared favorites:', error);
-        Navigate('/');
+        setIsLoading(true);
+        setError(true);
+        setMessage('User not found, please check the link or if the user exported the favorites. Redirecting to home page...');
+        setTimeout(() => {
+          setIsLoading(false);
+          navigate('/');
+        }, 4000);
       }
     };
 
+
     fetchFavorites();
-  }, [Navigate, id]);
+    
+  }, [navigate, id, user]);
+
+
 
   return (
     <div className="min-h-screen flex flex-col bg-gray-900 text-white">
@@ -38,7 +56,7 @@ const SharedFavoritesPage: React.FC = () => {
         <Link to="/">
           <img src="/logo.png" alt="Logo" className="h-20" />
         </Link>
-        <h1 className="text-4xl font-bold font-serif">Favorites of {email}</h1>
+        <h1 className="text-4xl font-bold font-serif">Favorites of {username}</h1>
 
         <div className="flex items-center space-x-6">
           {user ? (
@@ -76,6 +94,8 @@ const SharedFavoritesPage: React.FC = () => {
       <footer className="p-4 bg-gray-800 text-white text-center">
         <p>© 2024 Cinelist. All rights reserved.</p>
       </footer>
+
+      <LoadingModal isLoading={isLoading} message={message} error={error} success={success}></LoadingModal>
     </div>
   );
 };

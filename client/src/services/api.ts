@@ -39,11 +39,14 @@ export const getMovieDetails = async (movieId: number) => {
 
 export const postSharedFavorites = async (
   userId: string,
+  username: string,
   email: string,
   movieIds: number[]
 ) => {
+  console.log(userId, username, email, movieIds);
   const response = await api.post(`/movies/shared-favorites`, {
     userId,
+    username,
     email,
     movieIds,
   });

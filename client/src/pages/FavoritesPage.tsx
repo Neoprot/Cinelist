@@ -20,7 +20,7 @@ const FavoritesPage: React.FC = () => {
 
         try {
             const moviesId = favorites.map((movie) => movie.movie_id || movie.id);
-            const res = await postSharedFavorites(user.id, user.email, moviesId);
+            const res = await postSharedFavorites(user.id, user.username, user.email, moviesId);
             setSuccess(true);
             setMessage(`Shareable link: ${window.location.origin}/shared-favorites/${res.id}. 
                 In 5 seconds this window will be automatic closed.`);
@@ -76,7 +76,7 @@ const FavoritesPage: React.FC = () => {
                 <p>© 2024 Cinelist. All rights reserved.</p>
             </footer>
 
-            <LoadingModal isLoading={isLoading} message={message} success={success} />
+            <LoadingModal isLoading={isLoading} message={message} success={success} error={false}/>
         </div>
     );
 };

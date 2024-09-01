@@ -3,12 +3,18 @@ import { supabase } from "../services/supabaseClient";
 interface SharedFavorite {
   id: string;
   user_id: string;
+  username: string;
   email: string;
   movie_ids: string[];
 }
 
 export const SharedFavorite = {
-  async create(userId: string, email: string, movieIds: string[]) {
+  async create(
+    userId: string,
+    username: string,
+    email: string,
+    movieIds: string[]
+  ) {
     const { data: existingData, error: existingError } = await supabase
       .from("shared_favorites")
       .select("id")
@@ -28,14 +34,21 @@ export const SharedFavorite = {
     if (existingData) {
       ({ data, error } = await supabase
         .from("shared_favorites")
-        .update({ email, movie_ids: movieIds })
+        .update({ movie_ids: movieIds })
         .eq("user_id", userId)
         .select()
         .single());
     } else {
       ({ data, error } = await supabase
         .from("shared_favorites")
-        .insert([{ user_id: userId, email, movie_ids: movieIds }])
+        .insert([
+          {
+            user_id: userId,
+            username: username,
+            email: email,
+            movie_ids: movieIds,
+          },
+        ])
         .select()
         .single());
     }

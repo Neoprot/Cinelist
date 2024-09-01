@@ -7,10 +7,10 @@ import {
 } from "../services/sharedFavoritesService";
 
 export const createSharedFavorites = async (req: Request, res: Response) => {
-  const { userId, email, movieIds } = req.body;
+  const { userId, username, email, movieIds } = req.body;
 
   try {
-    const row = await postSharedFavorites(userId, email, movieIds);
+    const row = await postSharedFavorites(userId, username, email, movieIds);
     res.status(201).json(row);
   } catch (error) {
     res.status(400).json({ error: (error as Error).message });
