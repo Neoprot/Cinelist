@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { getMovieDetails } from '../services/api';
 import FavoriteButton from './FavoriteButton';
 import { useNavigate } from 'react-router-dom';
+import LoadingModal from './LoadingModal';
 
 interface MovieDetailsProps {
     movieId: number;
@@ -9,6 +10,10 @@ interface MovieDetailsProps {
 
 const MovieDetails: React.FC<MovieDetailsProps> = ({ movieId }) => {
     const [movie, setMovie] = useState<any>(null);
+    const [isLoading, setIsLoading] = useState(false);
+    const [message, setMessage] = useState('');
+    const [errorM, setErrorM] = useState(false);
+    const [success, setSuccess] = useState(false);
     const [samePage, setSamePage] = useState(false);
     const navigate = useNavigate();
 
@@ -34,15 +39,28 @@ const MovieDetails: React.FC<MovieDetailsProps> = ({ movieId }) => {
                 console.log(response);
                 setMovie(response);
             } catch (error) {
-                console.error("Erro ao buscar detalhes do filme:", error);
+                setIsLoading(true);
+                setErrorM(true);
+                setSuccess(false);
+                console.log(errorM);
+                setMessage('Movie not found. Redirecting to home page...');
+                setTimeout(() => {
+                    setIsLoading(false);
+                    setErrorM(false);
+                    navigate('/');
+                },4000)
             }
         };
         
         fetchMovieDetails();
-    }, [movieId]);
+    }, [errorM, isLoading, movieId, navigate]);
     
-    if (!movie) {
+    if (!movie && !errorM) {
         return <div>Loading...</div>;
+    }
+
+    if (errorM) {
+        return <LoadingModal isLoading={isLoading} message={message} error={errorM} success={success}></LoadingModal>;
     }
     
     const rating = movie.vote_average ? movie.vote_average.toFixed(1) : "Not Rated";
@@ -99,8 +117,10 @@ const MovieDetails: React.FC<MovieDetailsProps> = ({ movieId }) => {
                     ) : (
                         <p className="text-white">No production companies listed.</p>
                     )}
+
                 </div>
             </div>
+            
         </div>
     );
 };
