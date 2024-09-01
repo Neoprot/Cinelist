@@ -3,6 +3,7 @@ import { useFavorites } from '../context/FavoritesContext';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { FaHeart, FaHeartBroken } from 'react-icons/fa';
+import { IoMdHeartDislike , IoIosHeartEmpty, IoMdHeart } from "react-icons/io";
 
 interface FavoriteButtonProps {
     movie: any;
@@ -36,21 +37,29 @@ const FavoriteButton: React.FC<FavoriteButtonProps> = ({ movie }) => {
                 onClick={handleClick}
                 onMouseEnter={() => setHovered(true)}
                 onMouseLeave={() => setHovered(false)}
-                className="relative p-3 rounded-full bg-blue-800 w-12 h-12 focus:outline-none "
+                className="relative p-3 rounded-full bg-blue-800 w-12 h-12 flex items-center justify-center"
             >
-                <FaHeart
-                    className={`transition-transform duration-300 ${
-                        isFavorite ? 'text-red-500' : 'text-white'
-                    } ${hovered && !isFavorite ? 'scale-110 text-red-500' : ''}
-                        ${hovered && isFavorite ? 'hidden scale-110 relative' : ''}`}
-                    style={{ fontSize: '24px' }}
+                <IoIosHeartEmpty
+                    className={`transition-opacity duration-300 absolute text-white
+                        ${hovered || isFavorite ? 'opacity-0' : 'opacity-100'} `}
+                    style={{ fontSize: '32px' }}
                 />
-                {hovered && isFavorite && (
-                    <FaHeartBroken
-                        className="absolute scale-110 top-3 text-white opacity-100"
-                        style={{ fontSize: '24px' }}
-                    />
-                )}
+                <IoMdHeart
+                    className={`transition-opacity duration-300 absolute text-red-500
+                        ${hovered && !isFavorite ? 'opacity-100 scale-110' : 'opacity-0'}`}
+                    style={{ fontSize: '32px' }}
+                />
+                <IoMdHeart
+                    className={`transition-opacity duration-300 absolute text-red-500
+                        ${!hovered && isFavorite ? 'opacity-100' : 'opacity-0'}`}
+                    style={{ fontSize: '32px' }}
+                />
+                <IoMdHeartDislike 
+                    className={`transition-opacity duration-300 absolute
+                        ${hovered && isFavorite ? 'opacity-100' : 'opacity-0'} 
+                        text-white`}
+                    style={{ fontSize: '32px' }}
+                />
             </button>
             <span className="absolute left-1/2 transform -translate-x-1/2 top-full mt-2 opacity-0 group-hover:opacity-100 bg-gray-800 text-white text-xs rounded py-1 px-2 pointer-events-none transition-opacity duration-300">
                 {tooltipText}
