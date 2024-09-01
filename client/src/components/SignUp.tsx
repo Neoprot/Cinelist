@@ -1,30 +1,44 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import LoadingModal from './LoadingModal';
 import { FiEye, FiEyeOff } from 'react-icons/fi';
 
 const SignUp: React.FC = () => {
+    const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [termsAccepted, setTermsAccepted] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-    const { signup } = useAuth();
+    const {user, signup } = useAuth();
     const navigate = useNavigate();
 
     const [isLoading, setIsLoading] = useState(false);
     const [message, setMessage] = useState('Loading...');
     const [success, setSuccess] = useState(false);
+    const [error, setError] = useState(false);
 
     const togglePasswordVisibility = () => setShowPassword(!showPassword);
     const toggleConfirmPasswordVisibility = () => setShowConfirmPassword(!showConfirmPassword);
 
+    useEffect(() => {
+        if (user) {
+            setIsLoading(true);
+            setMessage('You are already logged in. Redirecting to home page.');
+            setSuccess(true);
+            setTimeout(() => {
+                navigate('/');
+                setIsLoading(false);
+            }, 2000);
+        }
+    }, [user, navigate]);
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         if (password !== confirmPassword) {
-            setMessage('Passwords do not match.');
+            alert('Passwords do not match.');
             setSuccess(false);
             setIsLoading(false);
             return;
@@ -40,17 +54,28 @@ const SignUp: React.FC = () => {
         setMessage('Loading...');
         setSuccess(false);
         try {
-            await signup(email, password);
+            const response: any = await signup(username,email, password);
+            console.log(response);
+            if (response.status !== 201) {
+                setMessage('Email already registered. Please try again.');
+                setSuccess(false);
+                setError(true);
+                setTimeout(() => {
+                    setIsLoading(false);
+                    setError(false);
+                }, 2000);
+                return;
+            }
             setMessage('User registered successfully!');
             setSuccess(true);
             setTimeout(() => {
-                navigate('/login');
+                navigate('/');
                 setIsLoading(false);
-            }, 1000);
+            }, 2000);
         } catch (error) {
-            setMessage('Error registering. Please try again.');
+            alert('Error registering. Please try again.');
             setSuccess(false);
-            setTimeout(() => setIsLoading(false), 1000);
+            setTimeout(() => setIsLoading(false), 2000);
         }
     };
 
@@ -66,6 +91,16 @@ const SignUp: React.FC = () => {
                 </div>
                 <h2 className="text-4xl font-bold text-center mb-6 font-serif">Sign Up</h2>
                 <form onSubmit={handleSubmit} className="space-y-4">
+                <div>
+                        <label className="block text-sm font-medium">Username</label>
+                        <input
+                            type="username"
+                            value={username}
+                            onChange={(e) => setUsername(e.target.value)}
+                            className="border p-2 w-full rounded"
+                            required
+                        />
+                    </div>
                     <div>
                         <label className="block text-sm font-medium">Email</label>
                         <input
@@ -128,7 +163,7 @@ const SignUp: React.FC = () => {
                     Already have an account? <a href="/login" className="text-blue-500">Login</a>
                 </p>
             </div>
-            <LoadingModal isLoading={isLoading} message={message} success={success} />
+            <LoadingModal isLoading={isLoading} message={message} success={success} error={error} />
         </div>
     );
 };

@@ -2,13 +2,18 @@ import { supabase } from "../services/supabaseClient";
 
 interface User {
   id: string;
+  username: string;
   email: string;
   created_at: string;
   password: string;
 }
 
 export const User = {
-  async create(userData: { email: string; password: string }) {
+  async create(userData: {
+    username: string;
+    email: string;
+    password: string;
+  }) {
     const { data, error } = await supabase
       .from("users")
       .insert([{ ...userData }])

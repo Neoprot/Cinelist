@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import LoadingModal from './LoadingModal';
@@ -7,7 +7,7 @@ import { FiEye, FiEyeOff } from 'react-icons/fi';
 const Login: React.FC = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const { login } = useAuth();
+    const { user, login } = useAuth();
     const navigate = useNavigate();
     const [showPassword, setShowPassword] = useState(false);
     const togglePasswordVisibility = () => setShowPassword(!showPassword);                        
@@ -15,24 +15,45 @@ const Login: React.FC = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [message, setMessage] = useState('Loading...');
     const [success, setSuccess] = useState(false);
+    const [error, setError] = useState(false);
 
+    useEffect(() => {
+        if (user) {
+            setIsLoading(true);
+            setMessage('You are already logged in. Redirecting to home page.');
+            setSuccess(true);
+            setTimeout(() => {
+                navigate('/');
+                setIsLoading(false);
+            }, 2000);
+        }
+    }, [user, navigate]);
+    
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setIsLoading(true);
         setSuccess(false);
         setMessage('Loading...');
         try {
-            await login(email, password);
+            const response: any = await login(email, password);
+            console.log(response);
+            if (response.status !== 200) {
+                setMessage('User not found. Please try again.');
+                setSuccess(false);
+                setError(true);
+                setTimeout(() => {
+                    setIsLoading(false);
+                    setError(false);
+                }, 2000);
+                return;
+            }
             setMessage('Logged in successfully!');
             setSuccess(true);
             setTimeout(() => {
                 navigate('/');
                 setIsLoading(false);
-            }, 1000);
+            }, 2000);
         } catch (error) {
-            setMessage('Error logging in. Please try again.');
-            setSuccess(false);
-            setTimeout(() => setIsLoading(false), 1000);
         }
     };
 
@@ -83,7 +104,7 @@ const Login: React.FC = () => {
                     Don't have an account? <a href="/signup" className="text-blue-500">Sign Up</a>
                 </p>
             </div>
-            <LoadingModal isLoading={isLoading} message={message} success={success} />
+            <LoadingModal isLoading={isLoading} message={message} success={success} error={error}/>
         </div>
     );
 };

@@ -3,8 +3,8 @@ import { api } from '../services/api';
 
 interface AuthContextProps {
     user: any;
-    signup: (email: string, password: string) => Promise<void>;
-    login: (email: string, password: string) => Promise<void>;
+    signup: (username: string,email: string, password: string) => Promise<unknown>;
+    login: (email: string, password: string) => Promise<unknown>;
     logout: () => void;
 }
 
@@ -30,28 +30,28 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         }
     }, []);
 
-    const signup = async (email: string, password: string) => {
+    const signup = async (username:string, email: string, password: string) => {
         try {
-            const response = await api.post('/auth/register', { email, password });
+            const response = await api.post('/auth/register', { username,email, password });
             localStorage.setItem('token', response.data.token);
             setUser(response.data.user);
             api.defaults.headers.common['Authorization'] = `Bearer ${response.data.token}`;
+            return response;
         } catch (error) {
-            console.error(error);
-            alert("Erro ao registrar: " + (error as any).response.data.error);
+            return (error as any);
         }
     };
 
     const login = async (email: string, password: string) => {
         try {
             const response = await api.post('/auth/login', { email, password });
-            console.log(response.data);
             localStorage.setItem('token', response.data.token);
             setUser(response.data.user);
             api.defaults.headers.common['Authorization'] = `Bearer ${response.data.token}`;
+            return response;
         } catch (error) {
-            console.error(error);
-            alert("Erro ao fazer login: " + (error as any).response.data.error);
+            alert("Erro ao fazer login: " + (error as any).response.data.message);
+            return (error as any);
         }
     };
 
