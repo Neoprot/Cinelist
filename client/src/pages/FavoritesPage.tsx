@@ -63,7 +63,7 @@ const FavoritesPage: React.FC = () => {
                     <h1 className="text-4xl font-bold font-serif">Your Favorite Movies</h1>
                     <button 
                         onClick={handleShareFavorites} 
-                        className="bg-blue-500 text-white px-4 py-2 rounded"
+                        className="bg-blue-800 text-white px-4 py-2 rounded"
                     >
                         Share your favorites Movies
                     </button>
