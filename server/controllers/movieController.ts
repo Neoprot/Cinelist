@@ -32,8 +32,9 @@ export const fetchMovieDetails = async (req: Request, res: Response) => {
 };
 
 export const getTrending = async (req: Request, res: Response) => {
+  const time = req.params.time;
   try {
-    const movies = await getTrendingMovies();
+    const movies = await getTrendingMovies(time);
     res.status(200).json(movies);
   } catch (error) {
     res.status(400).json({ error: (error as Error).message });

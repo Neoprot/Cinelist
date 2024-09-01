@@ -32,13 +32,16 @@ export const getMovieDetails = async (movieId: number) => {
   }
 };
 
-export const getTrendingMovies = async () => {
+export const getTrendingMovies = async (time: string) => {
   try {
-    const response = await axios.get(`${TMDB_BASE_URL}/trending/movie/week`, {
-      params: {
-        api_key: TMDB_API_KEY,
-      },
-    });
+    const response = await axios.get(
+      `${TMDB_BASE_URL}/trending/movie/${time}`,
+      {
+        params: {
+          api_key: TMDB_API_KEY,
+        },
+      }
+    );
     return response.data.results;
   } catch (error) {
     throw new Error(

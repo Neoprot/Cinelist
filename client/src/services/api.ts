@@ -10,8 +10,8 @@ export const fetchMovies = async (query: string) => {
   return response.data;
 };
 
-export const getTreadingMovies = async () => {
-  const response = await api.get(`/movies/trending`);
+export const getTreadingMovies = async (time: string) => {
+  const response = await api.get(`/movies/trending/${time}`);
   return response.data;
 };
 
