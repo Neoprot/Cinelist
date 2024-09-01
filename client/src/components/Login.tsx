@@ -1,25 +1,38 @@
 import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
-import { FiEye, FiEyeOff } from 'react-icons/fi';
 import { useNavigate } from 'react-router-dom';
+import LoadingModal from './LoadingModal';
+import { FiEye, FiEyeOff } from 'react-icons/fi';
 
 const Login: React.FC = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [showPassword, setShowPassword] = useState(false);
     const { login } = useAuth();
     const navigate = useNavigate();
-    const togglePasswordVisibility = () => setShowPassword(!showPassword);
+    const [showPassword, setShowPassword] = useState(false);
+    const togglePasswordVisibility = () => setShowPassword(!showPassword);                        
+
+    const [isLoading, setIsLoading] = useState(false);
+    const [message, setMessage] = useState('Loading...');
+    const [success, setSuccess] = useState(false);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        setIsLoading(true);
+        setSuccess(false);
+        setMessage('Loading...');
         try {
             await login(email, password);
-            alert("Logged in successfully!");
-            navigate('/');
+            setMessage('Logged in successfully!');
+            setSuccess(true);
+            setTimeout(() => {
+                navigate('/');
+                setIsLoading(false);
+            }, 1000);
         } catch (error) {
-            console.error("Error when logging in:", error);
-            alert("Error when logging in. Please, check your credentials and try again.");
+            setMessage('Error logging in. Please try again.');
+            setSuccess(false);
+            setTimeout(() => setIsLoading(false), 1000);
         }
     };
 
@@ -33,7 +46,7 @@ const Login: React.FC = () => {
                         className="h-24 w-24 object-contain"
                     />
                 </div>
-                <h2 className="text-2xl font-bold text-center mb-6">Login</h2>
+                <h2 className="text-4xl font-bold text-center mb-6 font-serif">Login</h2>
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <div>
                         <label className="block text-sm font-medium">Email</label>
@@ -57,7 +70,7 @@ const Login: React.FC = () => {
                         <button
                             type="button"
                             onClick={togglePasswordVisibility}
-                            className="absolute top-9 right-2 flex items-center justify-center text-gray-600"
+                            className="absolute top-9 right-3 flex items-center justify-center text-gray-600"
                         >
                             {showPassword ? <FiEyeOff size={20} /> : <FiEye size={20} />}
                         </button>
@@ -70,6 +83,7 @@ const Login: React.FC = () => {
                     Don't have an account? <a href="/signup" className="text-blue-500">Sign Up</a>
                 </p>
             </div>
+            <LoadingModal isLoading={isLoading} message={message} success={success} />
         </div>
     );
 };

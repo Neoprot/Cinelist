@@ -34,11 +34,11 @@ const HomePage: React.FC = () => {
                     )}
                 </div>
             </header>
-            <main className="flex-grow p-4 mx-8">
+            <main className="flex-grow px-4 mx-8">
                 <MovieSearch />
             </main>
             <footer className="p-4 bg-gray-800 text-white text-center">
-                <p>© 2024 Movie App. All rights reserved.</p>
+                <p>© 2024 Cinelist. All rights reserved.</p>
             </footer>
         </div>
     );

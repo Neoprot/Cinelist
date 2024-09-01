@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import LoadingModal from './LoadingModal';
 import { FiEye, FiEyeOff } from 'react-icons/fi';
 
 const SignUp: React.FC = () => {
@@ -13,27 +14,43 @@ const SignUp: React.FC = () => {
     const { signup } = useAuth();
     const navigate = useNavigate();
 
+    const [isLoading, setIsLoading] = useState(false);
+    const [message, setMessage] = useState('Loading...');
+    const [success, setSuccess] = useState(false);
+
     const togglePasswordVisibility = () => setShowPassword(!showPassword);
     const toggleConfirmPasswordVisibility = () => setShowConfirmPassword(!showConfirmPassword);
-
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         if (password !== confirmPassword) {
-            alert("Passwords do not match.");
+            setMessage('Passwords do not match.');
+            setSuccess(false);
+            setIsLoading(false);
             return;
         }
         if (!termsAccepted) {
-            alert("You must accept the terms of service.");
+            setMessage('You must accept the terms of service.');
+            setSuccess(false);
+            setIsLoading(false);
             return;
         }
 
+        setIsLoading(true);
+        setMessage('Loading...');
+        setSuccess(false);
         try {
             await signup(email, password);
-            navigate('/login');
+            setMessage('User registered successfully!');
+            setSuccess(true);
+            setTimeout(() => {
+                navigate('/login');
+                setIsLoading(false);
+            }, 1000);
         } catch (error) {
-            console.error("Error when registering:", error);
-            alert("Error when registering. Please try again.");
+            setMessage('Error registering. Please try again.');
+            setSuccess(false);
+            setTimeout(() => setIsLoading(false), 1000);
         }
     };
 
@@ -47,7 +64,7 @@ const SignUp: React.FC = () => {
                         className="h-24 w-24 object-contain"
                     />
                 </div>
-                <h2 className="text-2xl font-bold text-center mb-6">Sign Up</h2>
+                <h2 className="text-4xl font-bold text-center mb-6 font-serif">Sign Up</h2>
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <div>
                         <label className="block text-sm font-medium">Email</label>
@@ -111,6 +128,7 @@ const SignUp: React.FC = () => {
                     Already have an account? <a href="/login" className="text-blue-500">Login</a>
                 </p>
             </div>
+            <LoadingModal isLoading={isLoading} message={message} success={success} />
         </div>
     );
 };

@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, Navigate, useParams } from 'react-router-dom';
 import { getSharedFavorites } from '../services/api';
 import MovieDetails from '../components/MovieDetails';
 import { useAuth } from '../context/AuthContext';
+import { useNavigate } from 'react-router-dom';
 
 const SharedFavoritesPage: React.FC = () => {
   const { id } = useParams();
   const [movies, setMovies] = useState<any[]>([]);
   const { user, logout } = useAuth();
   const [email, setEmail] = useState('');
+  const Navigate = useNavigate();
 
   useEffect(() => {
     const fetchFavorites = async () => {
@@ -21,12 +23,14 @@ const SharedFavoritesPage: React.FC = () => {
         setEmail(response.email);
         setMovies(movieIds);
       } catch (error) {
+        alert('User not found, please check the link or if the user exported the favorites');
         console.error('Error fetching shared favorites:', error);
+        Navigate('/');
       }
     };
 
     fetchFavorites();
-  }, [id]);
+  }, [Navigate, id]);
 
   return (
     <div className="min-h-screen flex flex-col bg-gray-900 text-white">
@@ -34,7 +38,7 @@ const SharedFavoritesPage: React.FC = () => {
         <Link to="/">
           <img src="/logo.png" alt="Logo" className="h-20" />
         </Link>
-        <h1 className="text-3xl font-bold">Favorites of {email}</h1>
+        <h1 className="text-4xl font-bold font-serif">Favorites of {email}</h1>
 
         <div className="flex items-center space-x-6">
           {user ? (
@@ -70,7 +74,7 @@ const SharedFavoritesPage: React.FC = () => {
         )}
       </main>
       <footer className="p-4 bg-gray-800 text-white text-center">
-        <p>© 2024 Movie App. All rights reserved.</p>
+        <p>© 2024 Cinelist. All rights reserved.</p>
       </footer>
     </div>
   );
