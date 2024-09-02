@@ -52,6 +52,7 @@ export const getTrendingMovies = async (time: string) => {
 
 import { supabase } from "./supabaseClient";
 import { Database } from "../utils/databaseTypes";
+import { syncSharedFavorites } from "./sharedFavoritesService";
 
 type FavoriteRow = Database["public"]["Tables"]["favorites"]["Row"];
 
@@ -82,6 +83,11 @@ export const addFavorite = async (
     .single();
 
   if (error) throw error;
+  try {
+    await syncSharedFavorites(userId);
+  } catch (error) {
+    throw error;
+  }
   return data as FavoriteRow;
 };
 
@@ -101,4 +107,10 @@ export const deleteFavorite = async (userId: string, movieId: string) => {
     .eq("user_id", userId)
     .eq("movie_id", movieId);
   if (error) throw error;
+
+  try {
+    await syncSharedFavorites(userId);
+  } catch (error) {
+    throw error;
+  }
 };
