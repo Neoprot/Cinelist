@@ -4,6 +4,8 @@ import { SharedFavorite } from "../models/sharedFavoriteModel";
 import {
   postSharedFavorites,
   getSharedFavorites,
+  checkSharedFavorites,
+  excludeSharedFavorites,
 } from "../services/sharedFavoritesService";
 
 export const createSharedFavorites = async (req: Request, res: Response) => {
@@ -23,6 +25,26 @@ export const findSharedFavorites = async (req: Request, res: Response) => {
   try {
     const data = await getSharedFavorites(id);
     res.status(200).json(data);
+  } catch (error) {
+    res.status(400).json({ error: (error as Error).message });
+  }
+};
+
+export const hasSharedFavorites = async (req: Request, res: Response) => {
+  const userId = req.params.userId;
+  try {
+    const hasSharedFavorites = await checkSharedFavorites(userId);
+    res.status(200).json(hasSharedFavorites);
+  } catch (error) {
+    res.status(400).json({ error: (error as Error).message });
+  }
+};
+
+export const deleteSharedFavorites = async (req: Request, res: Response) => {
+  const { userId } = req.params;
+  try {
+    await excludeSharedFavorites(userId);
+    res.status(204).send();
   } catch (error) {
     res.status(400).json({ error: (error as Error).message });
   }

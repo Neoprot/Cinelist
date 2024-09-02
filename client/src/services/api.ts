@@ -57,3 +57,15 @@ export const getSharedFavorites = async (id: string) => {
   const response = await api.get(`/movies/shared-favorites/${id}`);
   return response.data;
 };
+
+export const hasSharedFavorites = async (userId: string) => {
+  const response = await api.get(
+    `/movies/shared-favorites/has-shared-favorites/${userId}`
+  );
+  return response.data;
+};
+
+export const deleteSharedFavorites = async (userId: string) => {
+  const response = await api.delete(`/movies/shared-favorites/${userId}`);
+  return response.data;
+};

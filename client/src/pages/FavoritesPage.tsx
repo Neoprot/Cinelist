@@ -1,17 +1,30 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import FavoriteList from '../components/FavoriteList';
 import { useAuth } from '../context/AuthContext';
-import { postSharedFavorites } from '../services/api';
+import { postSharedFavorites, hasSharedFavorites, deleteSharedFavorites } from '../services/api';
 import { useFavorites } from '../context/FavoritesContext';
 import LoadingModal from '../components/LoadingModal';  // Importa o componente do modal
 
 const FavoritesPage: React.FC = () => {
     const { favorites } = useFavorites();
     const { user, logout } = useAuth();
+    const [hasSharedFavoritesState,sethasSharedFavoritesState] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [message, setMessage] = useState('');
     const [success, setSuccess] = useState(false);
+
+    useEffect(() => {
+        async function fetchData() {
+            if (!user) return;
+            const res = await hasSharedFavorites(user.id);
+            console.log(res.id);
+            if (res.id) {
+                sethasSharedFavoritesState(true);
+            }
+        }
+        fetchData();
+    }, [user]);
 
     const handleShareFavorites = async () => {
         setIsLoading(true);
@@ -31,6 +44,7 @@ const FavoritesPage: React.FC = () => {
             }
             setTimeout(() => {
                 setIsLoading(false);
+                sethasSharedFavoritesState(true);
             }, 5000);
         } catch (error) {
             setSuccess(false);
@@ -38,10 +52,26 @@ const FavoritesPage: React.FC = () => {
             console.error('Error sharing favorites:', error);
         }
     };
+    const handleUnshareFavorites = async () => {
+        try {
+            setIsLoading(true);
+            setSuccess(false);
+            setMessage('Deleting shareable link...');
+            await deleteSharedFavorites(user.id);
+            setSuccess(true);
+            setMessage('Sharable link Deleted.');
+            setTimeout(() => {
+                setIsLoading(false);
+            }, 2000);
+            sethasSharedFavoritesState(false);
+        } catch (error) {
+            console.error('Error unsharing favorites:', error);
+        }
+    };
 
     return (
         <div className="min-h-screen flex flex-col bg-gray-900 text-white">
-            <header className="px-20 py-6 bg-blue-500 text-white flex justify-between items-center">
+            <header className="px-20 py-6 bg-blue-500 text-white flex justify-between items-center" onClick={()=>console.log(favorites.length)}>
                 <Link to="/">
                     <img src="/logo.png" alt="Logo" className="h-20" />
                 </Link>
@@ -61,12 +91,21 @@ const FavoritesPage: React.FC = () => {
             <main className="flex-grow px-20 py-8">
                 <div className="flex justify-between items-center mb-6">
                     <h1 className="text-4xl font-bold font-serif">Your Favorite Movies</h1>
-                    <button 
+                    {!hasSharedFavoritesState ? (
+                        <button 
                         onClick={handleShareFavorites} 
                         className="bg-blue-800 text-white px-4 py-2 rounded"
                     >
                         Share your favorites Movies
                     </button>
+                ) :(
+                    <button 
+                        onClick={handleUnshareFavorites} 
+                        className="bg-blue-800 text-white px-4 py-2 rounded"
+                    >
+                        Unshare your favorites Movies
+                    </button>
+                )}
                 </div>
                 <div className='mx-12'>
                     <FavoriteList />

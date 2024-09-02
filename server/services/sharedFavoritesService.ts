@@ -33,11 +33,37 @@ export const syncSharedFavorites = async (userId: string) => {
     .from("shared_favorites")
     .update([{ movie_ids: movieIds }])
     .eq("user_id", userId)
-    .select()
-    .single();
+    .select();
 
   if (sharedError) {
     console.error("Error syncing shared favorites:", sharedError.message);
     throw sharedError;
+  }
+};
+
+export const checkSharedFavorites = async (userId: string) => {
+  const { data, error } = await supabase
+    .from("shared_favorites")
+    .select("id")
+    .eq("user_id", userId)
+    .limit(1);
+
+  if (error) {
+    console.error("Error checking shared favorites:", error.message);
+    throw error;
+  }
+  if (data.length === 0) return { id: null };
+  return data[0];
+};
+
+export const excludeSharedFavorites = async (userId: string) => {
+  const { error } = await supabase
+    .from("shared_favorites")
+    .delete()
+    .eq("user_id", userId);
+
+  if (error) {
+    console.error("Error deleting shared favorites:", error.message);
+    throw error;
   }
 };
