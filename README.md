@@ -109,7 +109,7 @@ Bem vindo ao Cinelist!
     npm install
     ```
 
-14. Rode na pasta `/client`:
+14. Rode na pasta `/client` Espere até concluir e navegue até o locahost:port apresentado pelo terminal (normalmente port:4000):
 
     ```
     npm run start
