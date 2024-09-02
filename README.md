@@ -85,7 +85,7 @@ Bem vindo ao Cinelist!
 
    Substitua `qwertyuiopasdfghjklzxcvbnm123456` pela string gerada no passo 6.
 
-10. crie o .env do backend no caminho `/server`, como o abaixo:
+10. crie o .env do backend no caminho `/server`, como exatamente como o abaixo:
 
     ```.env
     TMDB_API_KEY=SUA TMDB_API_KEY
