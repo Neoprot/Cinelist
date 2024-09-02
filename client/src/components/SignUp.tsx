@@ -12,7 +12,7 @@ const SignUp: React.FC = () => {
     const [termsAccepted, setTermsAccepted] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-    const {signup } = useAuth();
+    const { signup } = useAuth();
     const navigate = useNavigate();
 
     const [isLoading, setIsLoading] = useState(false);
@@ -35,8 +35,19 @@ const SignUp: React.FC = () => {
         }
     }, [navigate]);
 
+    const validatePassword = (password: string) => {
+        const regex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/;
+        return regex.test(password);
+    };
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        if (!validatePassword(password)) {
+            alert('Password must contain at least one uppercase letter, one symbol, one letter, and be at least 6 characters long.');
+            setSuccess(false);
+            setIsLoading(false);
+            return;
+        }
         if (password !== confirmPassword) {
             alert('Passwords do not match.');
             setSuccess(false);
@@ -54,7 +65,7 @@ const SignUp: React.FC = () => {
         setMessage('Loading...');
         setSuccess(false);
         try {
-            const response: any = await signup(username,email, password);
+            const response: any = await signup(username, email, password);
             console.log(response);
             if (response.status !== 201) {
                 setMessage(response.response.data.message);
@@ -91,7 +102,7 @@ const SignUp: React.FC = () => {
                 </div>
                 <h2 className="text-4xl font-bold text-center mb-6 font-serif">Sign Up</h2>
                 <form onSubmit={handleSubmit} className="space-y-4">
-                <div>
+                    <div>
                         <label className="block text-sm font-medium">Username</label>
                         <input
                             type="username"
