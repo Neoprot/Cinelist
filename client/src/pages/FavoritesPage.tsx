@@ -9,6 +9,7 @@ import LoadingModal from '../components/LoadingModal';  // Importa o componente 
 const FavoritesPage: React.FC = () => {
     const { favorites } = useFavorites();
     const { user, logout } = useAuth();
+    const [id, setId] = useState('');
     const [hasSharedFavoritesState,sethasSharedFavoritesState] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [message, setMessage] = useState('');
@@ -18,6 +19,7 @@ const FavoritesPage: React.FC = () => {
         async function fetchData() {
             if (!user) return;
             const res = await hasSharedFavorites(user.id);
+            setId(res.id);
             console.log(res.id);
             if (res.id) {
                 sethasSharedFavoritesState(true);
@@ -68,6 +70,10 @@ const FavoritesPage: React.FC = () => {
             console.error('Error unsharing favorites:', error);
         }
     };
+    const goToSharedFavorites = (userId: any) => {
+        console.log(userId);
+        window.location.href = `/shared-favorites/${userId}`;
+    };	
 
     return (
         <div className="min-h-screen flex flex-col bg-gray-900 text-white">
@@ -99,12 +105,18 @@ const FavoritesPage: React.FC = () => {
                         Share your favorites Movies
                     </button>
                 ) :(
-                    <button 
-                        onClick={handleUnshareFavorites} 
-                        className="bg-blue-800 text-white px-4 py-2 rounded"
-                    >
-                        Unshare your favorites Movies
-                    </button>
+                    <><button
+                                onClick={()=>goToSharedFavorites(id)}
+                                className="bg-blue-800 text-white px-4 py-2 rounded"
+                            >
+                                Go to your shareable link
+                            </button>
+                            <button
+                                onClick={handleUnshareFavorites}
+                                className="bg-blue-800 text-white px-4 py-2 rounded"
+                            >
+                                    Unshare your favorites Movies
+                                </button></>
                 )}
                 </div>
                 <div className='mx-12'>
