@@ -3,6 +3,7 @@ import { getMovieDetails } from '../services/api';
 import FavoriteButton from './FavoriteButton';
 import { useNavigate } from 'react-router-dom';
 import LoadingModal from './LoadingModal';
+import CircularRate from './CircularRate';
 
 interface MovieDetailsProps {
     movieId: number;
@@ -31,6 +32,11 @@ const MovieDetails: React.FC<MovieDetailsProps> = ({ movieId }) => {
         }
     };
     
+    const convertRuntime = (runtime: number) => {
+        const hours = Math.floor(runtime / 60);
+        const minutes = runtime % 60;
+        return hours ? `${hours}h ${minutes}m` : `${minutes}m`;
+    };
     
     useEffect(() => {
         const fetchMovieDetails = async () => {
@@ -65,6 +71,7 @@ const MovieDetails: React.FC<MovieDetailsProps> = ({ movieId }) => {
     
     const rating = movie.vote_average ? movie.vote_average.toFixed(1) : "Not Rated";
     const releaseYear = movie.release_date ? new Date(movie.release_date).getFullYear() : '';
+    const runtimeFormatted = convertRuntime(movie.runtime);
 
     return (
         <div className="relative flex flex-col md:flex-row bg-white shadow-lg shadow-blue-400 rounded-lg overflow-hidden mb-6">
@@ -88,10 +95,13 @@ const MovieDetails: React.FC<MovieDetailsProps> = ({ movieId }) => {
                 </h1>
 
                 <p className="text-white mb-4">{movie.tagline}</p>
-                <p className="text-white mb-2"><strong>Rating:</strong> {rating}</p>
-                <p className="text-white mb-2"><strong>Genres:</strong> {movie.genres.map((genre: any) => genre.name).join(', ') || "Not Specified"}</p>
-                <p className="text-white mb-2"><strong>Runtime:</strong> {movie.runtime} minutes</p>
-                
+                <div className='flex gap-x-4'>
+                    <p className="text-white mb-2"><CircularRate rate={rating}></CircularRate></p>
+                    <div className='flex flex-col'>
+                        <p className="text-white mb-2"><strong>Genres:</strong> {movie.genres.map((genre: any) => genre.name).join(', ') || "Not Specified"}</p>
+                        <p className="text-white mb-2"><strong>Runtime:</strong> {runtimeFormatted}</p>
+                    </div>
+                </div>
                 <h1 className="text-4xl font-bold mb-2 text-white">Overview</h1>
                 <p className="text-white mb-4">{movie.overview}</p>
                 
