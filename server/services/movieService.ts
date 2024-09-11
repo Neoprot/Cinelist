@@ -1,8 +1,12 @@
 import axios from "axios";
+import { supabase } from "./supabaseClient";
+import { Database } from "../utils/databaseTypes";
+import { syncSharedFavorites } from "./sharedFavoritesService";
 
 const TMDB_API_KEY = process.env.TMDB_API_KEY;
 const TMDB_BASE_URL = "https://api.themoviedb.org/3";
 
+// Funções de requisição à API do The Movie Database
 export const getMovies = async (query: string) => {
   try {
     const response = await axios.get(`${TMDB_BASE_URL}/search/movie`, {
@@ -49,11 +53,7 @@ export const getTrendingMovies = async (time: string) => {
     );
   }
 };
-
-import { supabase } from "./supabaseClient";
-import { Database } from "../utils/databaseTypes";
-import { syncSharedFavorites } from "./sharedFavoritesService";
-
+// Funções de requisição ao banco de dados
 type FavoriteRow = Database["public"]["Tables"]["favorites"]["Row"];
 
 export const addFavorite = async (
