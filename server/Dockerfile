@@ -4,9 +4,6 @@ FROM node:slim
 # Installing openssl
 RUN apt-get update -y && apt-get install -y openssl
 
-# Declaring env
-COPY .env .env
-
 # Setting up the work directory
 WORKDIR /backend
 
