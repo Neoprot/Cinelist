@@ -1,23 +1,22 @@
-import { createClient } from "@supabase/supabase-js";
 import jwt from "jsonwebtoken";
-import { supabase } from "./supabaseClient";
+import prisma from "./prismaClient";
 
 export const userService = {
   async validateToken(token: string) {
     try {
-      const decoded = jwt.verify(token, process.env.JWT_SECRET!);
+      const decoded = jwt.verify(token, process.env.JWT_SECRET!) as {
+        userId: string;
+      };
 
-      const { data, error } = await supabase
-        .from("users")
-        .select("*")
-        .eq("id", (decoded as any).userId)
-        .single();
+      const user = await prisma.user.findUnique({
+        where: { id: decoded.userId },
+      });
 
-      if (error || !data) {
+      if (!user) {
         throw new Error("User not found");
       }
 
-      return data;
+      return user;
     } catch (error) {
       throw new Error("Invalid token");
     }

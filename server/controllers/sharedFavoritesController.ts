@@ -11,8 +11,14 @@ import {
 export const createSharedFavorites = async (req: Request, res: Response) => {
   const { userId, username, email, movieIds } = req.body;
 
+  const convertedMovieIds = movieIds.map((id: number) => id.toString());
   try {
-    const row = await postSharedFavorites(userId, username, email, movieIds);
+    const row = await postSharedFavorites(
+      userId,
+      username,
+      email,
+      convertedMovieIds
+    );
     res.status(201).json(row);
   } catch (error) {
     res.status(400).json({ error: (error as Error).message });

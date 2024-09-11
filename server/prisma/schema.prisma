@@ -1,0 +1,51 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  email     String   @unique
+  created_at DateTime @default(now()) @db.Timestamptz(6)
+  password  String
+  username  String   @unique
+  favorites Favorite[]
+  sharedFavorites SharedFavorite[]
+
+  @@map("users")
+}
+
+model Favorite {
+  id        Int      @id @default(autoincrement())
+  user_id    String?  @db.Uuid
+  movie_id   Int
+  title     String
+  poster_path String? @db.Text
+
+  user      User?    @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@map("favorites")
+}
+
+model SharedFavorite {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  user_id    String  @db.Uuid
+  username  String   @db.Text
+  email     String?  @db.Text
+  movie_ids  String[] 
+  created_at DateTime @default(now()) @db.Timestamp(6)
+  updated_at DateTime @default(now()) @db.Timestamptz(6)
+
+
+  user      User     @relation(fields: [user_id], references: [id])
+
+  @@map("shared_favorites")
+}
+
+/// Mapeamento da função update_timestamp
+// Prisma atualmente não oferece suporte direto a funções SQL como `update_timestamp`.
+// Para manter essa funcionalidade, ela deve ser gerenciada fora do Prisma, diretamente no banco de dados.

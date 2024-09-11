@@ -8,7 +8,7 @@ Bem vindo ao Cinelist!
 - Back: Node com Typescript
 - Banco de dados: PostGresSql (hospedado no supabase)
 
-# Como rodar
+# Como rodar (AINDA EM PRODUÇÃO)
 
 1. Pegue sua API key do [TMDB](https://developer.themoviedb.org/reference/intro/getting-started)
 2. Crie uma organização no [supabase](https://supabase.com) e crie um projeto dentro dessa organização.

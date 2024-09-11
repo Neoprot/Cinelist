@@ -1,8 +1,11 @@
 import axios from "axios";
+import prisma from "./prismaClient";
+import { syncSharedFavorites } from "./sharedFavoritesService";
 
 const TMDB_API_KEY = process.env.TMDB_API_KEY;
 const TMDB_BASE_URL = "https://api.themoviedb.org/3";
 
+// Funções para interagir com a API do TMDB
 export const getMovies = async (query: string) => {
   try {
     const response = await axios.get(`${TMDB_BASE_URL}/search/movie`, {
@@ -50,66 +53,61 @@ export const getTrendingMovies = async (time: string) => {
   }
 };
 
-import { supabase } from "./supabaseClient";
-import { Database } from "../utils/databaseTypes";
-import { syncSharedFavorites } from "./sharedFavoritesService";
-
-type FavoriteRow = Database["public"]["Tables"]["favorites"]["Row"];
-
+// Funções utilizando Prisma para favoritos
 export const addFavorite = async (
-  userId: string,
-  movieId: number,
+  user_id: string,
+  movie_id: number,
   title: string,
   poster_path: string
-): Promise<FavoriteRow | string> => {
-  const { data: existingFavorite, error: checkError } = await supabase
-    .from("favorites")
-    .select("*")
-    .eq("user_id", userId)
-    .eq("movie_id", movieId)
-    .single();
-
-  if (checkError && checkError.code !== "PGRST116") {
-    throw checkError;
-  }
+) => {
+  const existingFavorite = await prisma.favorite.findFirst({
+    where: {
+      user_id,
+      movie_id,
+    },
+  });
 
   if (existingFavorite) {
     return "Este filme já está na lista de favoritos.";
   }
 
-  const { data, error } = await supabase
-    .from("favorites")
-    .insert({ user_id: userId, movie_id: movieId, title, poster_path })
-    .single();
+  const newFavorite = await prisma.favorite.create({
+    data: {
+      user_id,
+      movie_id,
+      title,
+      poster_path: poster_path,
+    },
+  });
 
-  if (error) throw error;
   try {
-    await syncSharedFavorites(userId);
+    await syncSharedFavorites(user_id);
   } catch (error) {
     throw error;
   }
-  return data as FavoriteRow;
+
+  return newFavorite;
 };
 
-export const getFavorites = async (userId: string) => {
-  const { data, error } = await supabase
-    .from("favorites")
-    .select("*")
-    .eq("user_id", userId);
-  if (error) throw error;
-  return data;
+export const getFavorites = async (user_id: string) => {
+  const favorites = await prisma.favorite.findMany({
+    where: {
+      user_id,
+    },
+  });
+  return favorites;
 };
 
-export const deleteFavorite = async (userId: string, movieId: string) => {
-  const { error } = await supabase
-    .from("favorites")
-    .delete()
-    .eq("user_id", userId)
-    .eq("movie_id", movieId);
-  if (error) throw error;
+export const deleteFavorite = async (user_id: string, movie_id: number) => {
+  await prisma.favorite.deleteMany({
+    where: {
+      user_id,
+      movie_id,
+    },
+  });
 
   try {
-    await syncSharedFavorites(userId);
+    await syncSharedFavorites(user_id);
   } catch (error) {
     throw error;
   }

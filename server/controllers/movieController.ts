@@ -7,9 +7,6 @@ import {
   deleteFavorite,
   getTrendingMovies,
 } from "../services/movieService";
-import { Database } from "../utils/databaseTypes";
-
-type FavoriteRow = Database["public"]["Tables"]["favorites"]["Row"];
 
 export const fetchMovies = async (req: Request, res: Response) => {
   const query = req.query.query as string;
@@ -69,7 +66,7 @@ export const fetchFavorites = async (req: Request, res: Response) => {
 export const deleteFavorites = async (req: Request, res: Response) => {
   const { userId, movieId } = req.params;
   try {
-    const favorites = await deleteFavorite(userId, movieId);
+    const favorites = await deleteFavorite(userId, parseInt(movieId, 10));
     res.status(200).json(favorites);
   } catch (error) {
     res.status(400).json({ error: (error as Error).message });

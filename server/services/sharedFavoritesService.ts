@@ -1,69 +1,58 @@
-import { SharedFavorite } from "../models/sharedFavoriteModel";
-import { supabase } from "./supabaseClient";
+import prisma from "./prismaClient";
 
 export const postSharedFavorites = async (
-  userId: string,
+  user_id: string,
   username: string,
   email: string,
-  movieIds: string[]
+  movie_ids: string[]
 ) => {
-  const row = await SharedFavorite.create(userId, username, email, movieIds);
-  return row;
+  const sharedFavorite = await prisma.sharedFavorite.create({
+    data: {
+      user_id,
+      username,
+      email,
+      movie_ids,
+    },
+  });
+
+  return sharedFavorite;
 };
 
 export const getSharedFavorites = async (id: string) => {
-  const data = await SharedFavorite.findSharedFavorites({ id });
-  return data;
+  const sharedFavorite = await prisma.sharedFavorite.findUnique({
+    where: { id },
+  });
+
+  return sharedFavorite;
 };
 
-export const syncSharedFavorites = async (userId: string) => {
-  const { data, error } = await supabase
-    .from("favorites")
-    .select("movie_id")
-    .eq("user_id", userId);
+export const syncSharedFavorites = async (user_id: string) => {
+  const favorites = await prisma.favorite.findMany({
+    where: { user_id },
+    select: { movie_id: true },
+  });
 
-  if (error) {
-    console.error("Error syncing shared favorites:", error.message);
-    throw error;
-  }
+  const movie_ids = favorites.map((fav) => fav.movie_id.toString());
 
-  const movieIds = data.map((row) => row.movie_id);
+  const sharedFavorite = await prisma.sharedFavorite.updateMany({
+    where: { user_id },
+    data: { movie_ids },
+  });
 
-  const { data: sharedFavorites, error: sharedError } = await supabase
-    .from("shared_favorites")
-    .update([{ movie_ids: movieIds }])
-    .eq("user_id", userId)
-    .select();
-
-  if (sharedError) {
-    console.error("Error syncing shared favorites:", sharedError.message);
-    throw sharedError;
-  }
+  return sharedFavorite;
 };
 
-export const checkSharedFavorites = async (userId: string) => {
-  const { data, error } = await supabase
-    .from("shared_favorites")
-    .select("id")
-    .eq("user_id", userId)
-    .limit(1);
+export const checkSharedFavorites = async (user_id: string) => {
+  const sharedFavorite = await prisma.sharedFavorite.findFirst({
+    where: { user_id },
+    select: { id: true },
+  });
 
-  if (error) {
-    console.error("Error checking shared favorites:", error.message);
-    throw error;
-  }
-  if (data.length === 0) return { id: null };
-  return data[0];
+  return sharedFavorite ? { id: sharedFavorite.id } : { id: null };
 };
 
-export const excludeSharedFavorites = async (userId: string) => {
-  const { error } = await supabase
-    .from("shared_favorites")
-    .delete()
-    .eq("user_id", userId);
-
-  if (error) {
-    console.error("Error deleting shared favorites:", error.message);
-    throw error;
-  }
+export const excludeSharedFavorites = async (user_id: string) => {
+  await prisma.sharedFavorite.deleteMany({
+    where: { user_id },
+  });
 };
