@@ -1,9 +1,7 @@
 import { Request, Response } from "express";
-import jwt from "jsonwebtoken";
 import { registerUser, loginUser } from "../services/authService";
 import { userService } from "../services/userService";
 
-const JWT_SECRET = process.env.JWT_SECRET as string;
 
 export const register = async (req: Request, res: Response) => {
   try {

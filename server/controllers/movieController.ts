@@ -9,7 +9,6 @@ import {
 } from "../services/movieService";
 import { Database } from "../utils/databaseTypes";
 
-type FavoriteRow = Database["public"]["Tables"]["favorites"]["Row"];
 
 export const fetchMovies = async (req: Request, res: Response) => {
   const query = req.query.query as string;
