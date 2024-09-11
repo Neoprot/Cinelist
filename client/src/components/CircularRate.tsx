@@ -6,7 +6,6 @@ interface CircularRateProps {
 
 const CircularRate = ({ rate }: CircularRateProps) => {
     const getColor = (rate: number) => {
-        console.log(rate);
         if (rate > 7) return '#00A305'; // Verde
         if (rate > 5) return '#E49B0F'; // Amarelo
         return '#CB0000'; // Vermelho
