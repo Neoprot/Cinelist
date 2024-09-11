@@ -1,6 +1,4 @@
 import { Request, Response } from "express";
-import { supabase } from "../services/supabaseClient"; // Importe o cliente do Supabase
-import { SharedFavorite } from "../models/sharedFavoriteModel";
 import {
   postSharedFavorites,
   getSharedFavorites,
