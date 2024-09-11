@@ -1,20 +1,26 @@
 # Fetching the minified node image on apline linux
 FROM node:slim
 
+# Installing openssl
+RUN apt-get update -y && apt-get install -y openssl
+
 # Declaring env
-ENV NODE_ENV development
+COPY .env .env
 
 # Setting up the work directory
 WORKDIR /backend
 
-# Copying all the files in our project
-COPY . .
+# Copying package.json and package-lock.json
+COPY package*.json ./
 
 # Installing dependencies
 RUN npm install
 
-# Starting our application
-CMD [ "npm", "run", "dev"]
+# Copying all the rest of the files
+COPY . .
 
-# Exposing server port
+# Generate Prisma client
+RUN npx prisma generate
+
+# Command is now provided in docker-compose
 EXPOSE 5000
