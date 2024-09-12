@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useParams } from 'react-router-dom';
-import MovieDetails from '../components/MovieDetails'; // Ajuste a importação conforme necessário
+import MovieDetails from '../components/MovieDetails';
 import { useAuth } from '../context/AuthContext';
 
 const MovieDetailsPage: React.FC = () => {
@@ -12,7 +12,7 @@ const MovieDetailsPage: React.FC = () => {
         <div className="min-h-screen flex flex-col bg-gray-900 text-white">
             <header className="px-20 py-6 bg-blue-500 text-white flex justify-between items-center">
                 <Link to="/">
-                    <img src="/logo.png" alt="Logo" className="h-20" />
+                    <img src="/logo.png" alt="Logo" className="h-16" />
                 </Link>
                 <div className="flex items-center space-x-6">
                     {user ? (
