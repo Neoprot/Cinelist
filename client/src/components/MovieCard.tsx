@@ -22,9 +22,9 @@ const MovieCard: React.FC<MovieCardProps> = ({ movie }) => {
     const rating = movie.vote_average ? movie.vote_average.toFixed(1) : "Not Rated";
 
     return (
-        <div className="min-w-[200px] max-w-[200px] flex flex-col items-center pb-2">
+        <div className="min-w-[200px] max-w-[250px] flex flex-col items-center pb-2">
             <div
-                className="relative w-full h-[300px] flex items-center justify-center rounded-t-3xl bg-gray-200 rounded-b-md cursor-pointer"
+                className="relative w-full min-h-[300px] max-h-[350px] flex items-center justify-center rounded-t-3xl bg-gray-200 rounded-b-md cursor-pointer"
                 onClick={handleCardClick}
             >
                 {hasPoster ? (
@@ -49,7 +49,7 @@ const MovieCard: React.FC<MovieCardProps> = ({ movie }) => {
                 </div>
             </div>
 
-            <div className="w-full text-center">
+            <div className="w-full text-center mt-2">
                 <h2
                     className="text-lg text-white font-bold mt-2 hover:text-blue-500 cursor-pointer inline"
                     onClick={handleCardClick}
