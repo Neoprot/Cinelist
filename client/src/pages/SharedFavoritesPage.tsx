@@ -3,7 +3,7 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import { getSharedFavorites } from '../services/api';
 import MovieDetails from '../components/MovieDetails';
 import { useAuth } from '../context/AuthContext';
-import LoadingModal from '../components/LoadingModal';
+import LoadingModal from '../components/modals/LoadingModal';
 
 const SharedFavoritesPage: React.FC = () => {
   const { id } = useParams();

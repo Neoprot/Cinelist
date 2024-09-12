@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import MovieList from './MovieList';
-import { getTreadingMovies } from '../services/api';
+import { getTreadingMovies } from '../../services/api';
 
 
 const TrendingMovies = () => {

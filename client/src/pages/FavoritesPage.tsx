@@ -4,8 +4,8 @@ import FavoriteList from '../components/FavoriteList';
 import { useAuth } from '../context/AuthContext';
 import { postSharedFavorites, hasSharedFavorites, deleteSharedFavorites } from '../services/api';
 import { useFavorites } from '../context/FavoritesContext';
-import LoadingModal from '../components/LoadingModal';
-import ShareModal from '../components/ShareModal'; 
+import LoadingModal from '../components/modals/LoadingModal';
+import ShareModal from '../components/modals/ShareModal'; 
 
 const FavoritesPage: React.FC = () => {
     const { favorites } = useFavorites();

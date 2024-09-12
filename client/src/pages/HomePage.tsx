@@ -1,8 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import MovieSearch from '../components/MovieSearch';
-import TrendingMovies from '../components/TrendingMovies';
+import MovieSearch from '../components/home/MovieSearch';
+import TrendingMovies from '../components/home/TrendingMovies';
 
 const HomePage: React.FC = () => {
     const { user, logout } = useAuth();

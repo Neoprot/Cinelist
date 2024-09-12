@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { useAuth } from '../context/AuthContext';
+import { useAuth } from '../../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
-import LoadingModal from './LoadingModal';
+import LoadingModal from '../modals/LoadingModal';
 import { FiEye, FiEyeOff } from 'react-icons/fi';
 
 const Login: React.FC = () => {

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { useFavorites } from '../context/FavoritesContext';
-import { useAuth } from '../context/AuthContext';
+import { useFavorites } from '../../context/FavoritesContext';
+import { useAuth } from '../../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { IoMdHeartDislike , IoIosHeartEmpty, IoMdHeart } from "react-icons/io";
 
