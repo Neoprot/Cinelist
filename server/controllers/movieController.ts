@@ -10,8 +10,9 @@ import {
 
 export const fetchMovies = async (req: Request, res: Response) => {
   const query = req.query.query as string;
+  const page = req.query.page ? parseInt(req.query.page as string, 10) : 1;
   try {
-    const movies = await getMovies(query);
+    const movies = await getMovies(query, page);
     res.status(200).json(movies);
   } catch (error) {
     res.status(400).json({ error: (error as Error).message });

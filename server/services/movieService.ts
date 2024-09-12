@@ -6,15 +6,16 @@ const TMDB_API_KEY = process.env.TMDB_API_KEY;
 const TMDB_BASE_URL = "https://api.themoviedb.org/3";
 
 // Funções para interagir com a API do TMDB
-export const getMovies = async (query: string) => {
+export const getMovies = async (query: string, page: number) => {
   try {
     const response = await axios.get(`${TMDB_BASE_URL}/search/movie`, {
       params: {
         api_key: TMDB_API_KEY,
         query,
+        page,
       },
     });
-    return response.data.results;
+    return response.data;
   } catch (error: any) {
     throw new Error(`Failed to fetch movies: ${(error as Error).message}`);
   }
