@@ -54,9 +54,9 @@ export const getTrendingMovies = async (time: string) => {
     );
   }
 };
-// Funções de requisição ao banco de dados
-type FavoriteRow = Database["public"]["Tables"]["favorites"]["Row"];
 
+type FavoriteRow = Database["public"]["Tables"]["favorites"]["Row"];
+// Funções de requisição ao banco de dados
 export const addFavorite = async (
   userId: string,
   movieId: number,
