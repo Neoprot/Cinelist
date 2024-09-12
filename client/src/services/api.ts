@@ -1,12 +1,11 @@
-// api.ts
 import axios from "axios";
 
 export const api = axios.create({
   baseURL: process.env.REACT_APP_API_BASE_URL,
 });
 
-export const fetchMovies = async (query: string) => {
-  const response = await api.get(`/movies/search?query=${query}`);
+export const fetchMovies = async (query: string, page: number = 1) => {
+  const response = await api.get(`/movies/search?query=${query}&page=${page}`);
   return response.data;
 };
 
