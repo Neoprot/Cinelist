@@ -24,7 +24,7 @@ const ShareModal: React.FC<ShareModalProps> = ({ isOpen, shareableLink, onClose 
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50" onClick={onClose}>
             <div
                 className="bg-white p-6 rounded-md shadow-md text-center"
-                onClick={(e) => e.stopPropagation()} // Evita fechar o modal ao clicar dentro
+                onClick={(e) => e.stopPropagation()}
             >
                 
 

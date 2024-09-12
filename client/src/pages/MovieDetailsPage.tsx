@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useParams } from 'react-router-dom';
-import MovieDetails from '../components/MovieDetails'; // Ajuste a importação conforme necessário
+import MovieDetails from '../components/MovieDetails';
 import { useAuth } from '../context/AuthContext';
 
 const MovieDetailsPage: React.FC = () => {
