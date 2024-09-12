@@ -36,7 +36,7 @@ const SignUp: React.FC = () => {
     }, [navigate]);
 
     const validatePassword = (password: string) => {
-        const regex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/;
+        const regex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&#^])[A-Za-z\d@$!%*?&#^]{6,}$/;
         return regex.test(password);
     };
 
