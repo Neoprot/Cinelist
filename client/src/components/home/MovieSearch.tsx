@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import SearchForm from './SearchForm';
+import SearchForm from '../SearchForm';
 
 const MovieSearch: React.FC = () => {
     const [query, setQuery] = useState('');

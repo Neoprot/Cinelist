@@ -1,11 +1,11 @@
 import React from 'react';
-import MovieCard from './MovieCard';
+import MovieCard from './moviecard/MovieCard';
 
 interface MovieListProps {
     movies: any[];
 }
 
-const MovieList: React.FC<MovieListProps> = ({ movies }) => {
+const MoviesGrid: React.FC<MovieListProps> = ({ movies }) => {
     return (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 px-8">
             {movies.map((movie, index) => (
@@ -15,4 +15,4 @@ const MovieList: React.FC<MovieListProps> = ({ movies }) => {
     );
 };
 
-export default MovieList;
+export default MoviesGrid;

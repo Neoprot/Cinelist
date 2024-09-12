@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { getMovieDetails } from '../services/api';
-import FavoriteButton from './FavoriteButton';
+import FavoriteButton from './moviecard/FavoriteButton';
 import { useNavigate } from 'react-router-dom';
-import LoadingModal from './LoadingModal';
-import CircularRate from './CircularRate';
+import LoadingModal from './modals/LoadingModal';
+import CircularRate from './moviecard/CircularRate';
 
 interface MovieDetailsProps {
     movieId: number;

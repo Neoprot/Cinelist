@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from 'react';
-import MovieCard from './MovieCard';
+import MovieCard from '../moviecard/MovieCard';
 import { IconButton } from '@mui/material';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
