@@ -36,14 +36,14 @@ const SignUp: React.FC = () => {
     }, [navigate]);
 
     const validatePassword = (password: string) => {
-        const regex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/;
+        const regex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&#^])[A-Za-z\d@$!%*?&#^]{6,}$/;
         return regex.test(password);
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!validatePassword(password)) {
-            alert('Password must contain at least one uppercase letter, one symbol, one letter, and be at least 6 characters long.');
+            alert('Password must     contain at least one uppercase letter, one symbol, one letter, and be at least 6 characters long.');
             setSuccess(false);
             setIsLoading(false);
             return;
