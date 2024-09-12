@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import MovieSearch from '../components/MovieSearch';
+import TrendingMovies from '../components/TrendingMovies';
 
 const HomePage: React.FC = () => {
     const { user, logout } = useAuth();
@@ -9,7 +10,7 @@ const HomePage: React.FC = () => {
     return (
         <div className="min-h-screen flex bg-gray-900 flex-col">
             <header className="px-20 py-6 bg-blue-500 text-white flex justify-between items-center">
-                <img src="/logo.png" alt="Logo" className="h-20" />
+                <img src="/logo.png" alt="Logo" className="h-16" />
                 <div className="flex items-center space-x-6">
                     {user ? (
                         <>
@@ -36,6 +37,7 @@ const HomePage: React.FC = () => {
             </header>
             <main className="flex-grow px-4 mx-8">
                 <MovieSearch />
+                <TrendingMovies/>
             </main>
             <footer className="p-4 bg-gray-800 text-white text-center">
                 <p>© 2024 Cinelist. All rights reserved.</p>
