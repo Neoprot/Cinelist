@@ -42,8 +42,7 @@ export const postSharedFavorites = async (
   email: string,
   movieIds: number[]
 ) => {
-  console.log(userId, username, email, movieIds);
-  const response = await api.post(`/movies/shared-favorites`, {
+  const response = await api.post(`/shared/shared-favorites`, {
     userId,
     username,
     email,
@@ -53,18 +52,18 @@ export const postSharedFavorites = async (
 };
 
 export const getSharedFavorites = async (id: string) => {
-  const response = await api.get(`/movies/shared-favorites/${id}`);
+  const response = await api.get(`/shared/shared-favorites/${id}`);
   return response.data;
 };
 
 export const hasSharedFavorites = async (userId: string) => {
-  const response = await api.get(
-    `/movies/shared-favorites/has-shared-favorites/${userId}`
-  );
+  const response = await api.get(`/shared/has-shared-favorites/${userId}`);
   return response.data;
 };
 
 export const deleteSharedFavorites = async (userId: string) => {
-  const response = await api.delete(`/movies/shared-favorites/${userId}`);
+  const response = await api.delete(
+    `/shared/delete-shared-favorites/${userId}`
+  );
   return response.data;
 };
