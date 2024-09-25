@@ -2,6 +2,8 @@
 
 Bem vindo ao Cinelist!
 
+![image](https://github.com/user-attachments/assets/f8d7b762-6fc7-4f89-9638-ce48a81b5725)
+
 # Tecnologias utilizadas
 
 - Front: React com Typescript
